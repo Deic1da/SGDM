@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Validar Doação</title>
-<link rel="stylesheet" href="ValidarDoacao.css">
+<link rel="stylesheet" href="{{ asset('css/ValidarDoacao.css') }}">
 </head>
 
 <body>

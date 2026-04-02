@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <title>Atenção</title>
 
-<link rel="stylesheet" href="Descarte.css">
+<link rel="stylesheet" href="{{ asset('css/Descarte.css') }}">
 
 </head>
 

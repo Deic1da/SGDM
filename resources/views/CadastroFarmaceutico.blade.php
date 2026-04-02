@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cadastro de Farmacêutico</title>
-<link rel="stylesheet" href="CadastroFarmaceutico.css">
+<link rel="stylesheet" href="{{ asset('css/CadastroFarmaceutico.css') }}">
 </head>
 
 <body>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Cadastrar Medicamento</title>
-<link rel="stylesheet" href="CadastroMedicamento.css">
+<link rel="stylesheet" href="{{ asset('css/CadastroMedicamento.css') }}">
 </head>
 
 <body>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Estoque de Medicamentos</title>
-<link rel="stylesheet" href="EstoqueMedicamento.css">
+<link rel="stylesheet" href="{{ asset('css/EstoqueMedicamento.css') }}">
 </head>
 
 <body>

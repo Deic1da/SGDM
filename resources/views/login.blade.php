@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>SGDM</title>
-        <link href="login.css" rel="stylesheet">
+        <link href="{{ asset('css/Login.css') }}" rel="stylesheet">
 </head>
 <body>
     <section class="login" id="login">
