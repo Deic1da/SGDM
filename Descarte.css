@@ -1,0 +1,32 @@
+body{
+margin:0;
+font-family:Arial, Helvetica, sans-serif;
+}
+
+.fundo{
+background:#d3d3d3;
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+}
+
+.aviso{
+background:#ff3b3b;
+color:white;
+width:240px;
+padding:35px 25px;
+border-radius:25px;
+text-align:center;
+}
+
+.aviso h1{
+font-size:36px;
+margin-bottom:15px;
+}
+
+.aviso p{
+font-size:12px;
+line-height:1.5;
+margin-bottom:10px;
+}

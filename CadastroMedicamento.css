@@ -1,0 +1,101 @@
+body{
+font-family: Arial, Helvetica, sans-serif;
+background:#f5f5f5;
+margin:0;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+}
+
+.container{
+width:1100px;
+background:white;
+padding:40px;
+border-radius:8px;
+}
+
+h1{
+text-align:center;
+margin-bottom:40px;
+}
+
+.grid{
+display:grid;
+grid-template-columns:1fr 1fr 1fr;
+gap:40px;
+align-items:start;
+}
+
+label{
+display:block;
+margin-top:10px;
+margin-bottom:5px;
+font-size:14px;
+}
+
+input[type="text"],
+input[type="date"]{
+width:100%;
+padding:10px;
+border-radius:6px;
+border:1px solid #ccc;
+}
+
+.tipo{
+display:flex;
+margin-top:20px;
+}
+
+.tipo button{
+flex:1;
+padding:10px;
+border:1px solid #ccc;
+background:#eee;
+cursor:pointer;
+}
+
+.tipo button.ativo{
+background:#dcd6f7;
+border-color:#6c63ff;
+}
+
+.check{
+margin-top:15px;
+font-size:14px;
+}
+
+.exemplo{
+font-size:12px;
+color:#777;
+margin-top:-5px;
+}
+
+.pontos-coleta{
+border-left:1px solid #ccc;
+padding-left:20px;
+}
+
+.pontos-coleta h3{
+font-size:16px;
+margin-bottom:15px;
+}
+
+.ponto{
+border:1px solid #ccc;
+padding:10px;
+margin-bottom:10px;
+text-align:center;
+border-radius:5px;
+}
+
+.finalizar{
+display:block;
+margin:40px auto 0 auto;
+padding:12px 25px;
+border:none;
+background:#6c63ff;
+color:white;
+border-radius:20px;
+cursor:pointer;
+}
