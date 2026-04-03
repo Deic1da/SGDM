@@ -17,3 +17,11 @@ Route::get('/CadastroMedicamento', function () {
 Route::get('/Descarte', function () {
     return view('Descarte');
 });
+
+Route::get('/ValidarDoacao', function () {
+    return view('ValidarDoacao');
+});
+
+Route::get('/PaginaInicial', function () {
+    return view('PaginaInicial');
+});
