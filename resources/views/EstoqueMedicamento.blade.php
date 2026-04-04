@@ -103,15 +103,6 @@
 
             <button class="entrega">Registrar Entrega</button>
 
-            <textarea placeholder="Outro Motivo de Descarte"></textarea>
-
-            <div class="check">
-                <input type="checkbox">
-                <span>Fora da Validade</span>
-            </div>
-
-            <button class="descarte">Registrar Descarte</button>
-
         </div>
 
     </div>

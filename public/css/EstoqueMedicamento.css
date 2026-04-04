@@ -66,6 +66,7 @@ font-size:13px;
 display:flex;
 flex-direction:column;
 gap:18px;
+justify-content: center;
 }
 
 .formulario input{

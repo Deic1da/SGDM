@@ -19,11 +19,11 @@
         <nav>
             <div class="navEsquerda">
                 <input type="text" placeholder="Pesquisar Medicamento">
-                <button class="roxo">Doar Medicamento</button>
+                <button class="roxo" onclick="window.location.href='{{ route('cadastro-medicamento') }}'">Doar Medicamento</button>
             </div>
             <div class="navDireita">
-                <button class="cinza">Área do Farmacêutico</button>
-                <button class="cinza">Gerenciar Ponto de Coleta</button>
+                <button class="cinza" onclick="window.location.href='{{ route('cadastro-farmaceutico') }}'">Área do Farmacêutico</button>
+                <button class="cinza" onclick="window.location.href='{{ route('estoque-medicamento') }}'">Gerenciar Ponto de Coleta</button>
             </div>
         </nav>
 

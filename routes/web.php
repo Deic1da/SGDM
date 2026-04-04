@@ -1,33 +1,50 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AuthController;
 
 Route::get('/', function () {
+
+    if (Auth::check()) {
+        return redirect('/PaginaInicial');
+    }
+
     return view('Login');
-});
+})->name('login');
 
-Route::get('/CadastroFarmaceutico', function () {
-    return view('CadastroFarmaceutico');
-});
-
-Route::get('/CadastroMedicamento', function () {
-    return view('CadastroMedicamento');
-});
-
-Route::get('/Descarte', function () {
-    return view('Descarte');
-});
-
-Route::get('/ValidarDoacao', function () {
-    return view('ValidarDoacao');
-});
-
-Route::get('/PaginaInicial', function () {
-    return view('PaginaInicial');
-});
-
-
+Route::middleware('auth')->group(function () {
     
+    Route::get('/CadastroFarmaceutico', function () {
+        return view('CadastroFarmaceutico');
+    })->name('cadastro-farmaceutico');
+    
+    Route::get('/CadastroMedicamento', function () {
+        return view('CadastroMedicamento');
+    })->name('cadastro-medicamento');
+    
+    Route::get('/Descarte', function () {
+        return view('Descarte');
+    })->name('descarte');
+    
+    Route::get('/ValidarDoacao', function () {
+        return view('ValidarDoacao');
+    })->name('validar-doacao');
+    
+    Route::get('/PaginaInicial', function () {
+        return view('PaginaInicial');
+    })->name('pagina-inicial');
+
+    Route::get('/EstoqueMedicamento', function () {
+        return view('EstoqueMedicamento');
+    })->name('estoque-medicamento');
+
+});
+
+
+
+
+
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
+Route::post('/logout', [AuthController::class, 'logout']);

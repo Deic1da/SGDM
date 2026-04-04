@@ -66,4 +66,10 @@ class AuthController extends Controller
             'email' => 'Credenciais inválidas',
         ]);
     }
+
+
+    protected function redirectTo($request)
+    {
+        return '/';
+    }
 }
