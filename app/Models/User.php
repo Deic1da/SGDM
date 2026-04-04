@@ -18,10 +18,20 @@ class User extends Authenticatable
      *
      * @var list<string>
      */
+    protected $table = 'usuarios';
+
     protected $fillable = [
-        'name',
+        'nome_completo',
+        'cpf',
         'email',
+        'telefone',
         'password',
+        'cep',
+        'logradouro',
+        'numero',
+        'bairro',
+        'municipio',
+        'estado',
     ];
 
     /**
@@ -45,5 +55,10 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function getAuthPassword()
+    {
+        return $this->password;
     }
 }

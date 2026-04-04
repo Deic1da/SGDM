@@ -9,11 +9,12 @@
 <body>
     <section class="login" id="login">
         <h1>Login</h1>
-        <form class="formLogin" action="" method="post">
+        <form class="formLogin" action="/login" method="post">
+            @csrf
             <label for="email">E-mail</label>
             <input type="email" id="email" name="email" placeholder="xxx@xxx.xxx">
             <label for="senha">Senha</label>
-            <input type="password" id="senha" name="senha" placeholder="********">
+            <input type="password" id="senha" name="password" placeholder="********">
             <div class="selectBoxs">
                 <div class="selectBoxLine1">
                     <input type="checkbox" id="mostrarSenha" name="mostrarSenha">
@@ -32,7 +33,8 @@
     <div class="divisorMeio"></div>
     <section class="cadastro" id="cadastro">
         <h1>Cadastro</h1>
-        <form class="formCadastro" action="" method="post">
+        <form class="formCadastro" action="/register" method="post">
+            @csrf
             <div class="dadosForm">
 
                 <div class="esquerda">
@@ -41,13 +43,13 @@
                     <label for="cpf">CPF</label>
                     <input type="text" id="cpf" name="cpf" placeholder="000.000.000-00">
                     <label for="nome">Nome</label>
-                    <input type="text" id="nome" name="nome" placeholder="Seu nome completo">
+                    <input type="text" id="nome" name="nome_completo" placeholder="Seu nome completo">
                     <label for ="telefone">Telefone</label>
                     <input type="text" id="telefone" name="telefone" placeholder="(00) 00000-0000">
                     <label for="cadastroSenha">Senha</label>
-                <input type="password" id="cadastroSenha" name="senha" placeholder="Mínimo 8 caracteres">
+                <input type="password" id="cadastroSenha" name="password" placeholder="Mínimo 8 caracteres">
                 <label for="confirmarSenha">Confirmar Senha</label>
-                <input type="password" id="confirmarSenha" name="confirmarSenha" placeholder="********">
+                <input type="password" id="confirmarSenha" name="password_confirmation" placeholder="********">
             </div>
             <div class="direita">
                 
@@ -87,6 +89,7 @@
                 <label for="municipio">Município</label>
                 <select name="municipio" id="municipio">
                     <option value="">Selecione o município</option>
+                    <option value="MC">Matriz de Camaragibe</option>
                 </select>
                 <label for="bairro">Bairro</label>
                 <input type="text" id="bairro" name="bairro" placeholder="Nome do bairro">
