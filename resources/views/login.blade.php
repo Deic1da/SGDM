@@ -4,33 +4,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SGDM</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700&family=Teko:wght@500;600&display=swap" rel="stylesheet">
     <link href="{{ asset('css/Login.css') }}" rel="stylesheet">
 </head>
 <body>
+    <main class="authShell">
     <section class="login" id="login">
-        <h1>Login</h1>
+        <div class="panelHeader">
+            <p class="eyebrow">Sistema SGDM</p>
+            <h1>Login</h1>
+        </div>
+
         <form class="formLogin" action="/login" method="post">
             @csrf
             <label for="email">E-mail</label>
-            <input type="email" id="email" name="email" placeholder="xxx@xxx.xxx">
+            <input type="email" id="email" name="email" placeholder="xxx@xxx.xxx" required>
+
             <label for="senha">Senha</label>
-            <input type="password" id="senha" name="password" placeholder="********">
+            <input type="password" id="senha" name="password" placeholder="********" required>
+
             <div class="selectBoxs">
-                <div class="selectBoxLine1">
+                <label class="checkLine" for="mostrarSenha">
                     <input type="checkbox" id="mostrarSenha" name="mostrarSenha">
-                    <label for="mostrarSenha">Mostrar Senha</label>
-                </div>
-                <div class="selectBoxLine2">
-                    <div class="selectBoxLine2Dois">
+                    <span>Mostrar Senha</span>
+                </label>
+
+                <div class="actionsRow">
+                    <label class="checkLine" for="manterLogin">
                         <input type="checkbox" id="manterLogin" name="manterLogin">
-                        <label for="manterLogin">Manter Login</label>
-                        <button type="submit">Entrar</button>
-                    </div>
+                        <span>Manter Login</span>
+                    </label>
+                    <button type="submit">Entrar</button>
                 </div>
             </div>
-            </form>
+        </form>
     </section>
+
     <div class="divisorMeio"></div>
+
     <section class="cadastro" id="cadastro">
         <h1>Cadastro</h1>
         <form class="formCadastro" action="/register" method="post">
@@ -103,5 +116,23 @@
         </form>
         
     </section>
+
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const mostrarSenha = document.getElementById('mostrarSenha');
+            const senha = document.getElementById('senha');
+
+            if (!mostrarSenha || !senha) return;
+
+            const alternarVisibilidade = function () {
+                senha.type = mostrarSenha.checked ? 'text' : 'password';
+            };
+
+            mostrarSenha.addEventListener('change', alternarVisibilidade);
+            mostrarSenha.addEventListener('input', alternarVisibilidade);
+        });
+    </script>
 </body>
 </html>

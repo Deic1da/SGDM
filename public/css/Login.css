@@ -1,97 +1,255 @@
-body{
-    display: flex;
-    flex-direction: row;
-    
-    min-height: 100vh;
-    align-items: center;
-    justify-content: center;
-
-    gap : 50px;
-}
-.divisorMeio{
-    width: 1px;
-    height: 450px;
-    background-color: black;
-    margin: 0 20px;
+:root {
+    --primary: #773dbe;
+    --ink: #000000;
+    --surface: #ffffff;
+    --line: #ccc;
 }
 
-/* cadastro */
-.dadosForm{
-    display: flex;
-    flex-direction:row;
-    gap: 15px;
-}
-.formCadastro{
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    align-items: center;
-}
-.esquerda{
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-.direita{
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.cadastro{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-input, select {
-    height: 30px;
-    padding: 5px;
+* {
     box-sizing: border-box;
-    border-radius: 8px;
-    border: 1px solid #ccc;
 }
 
-/* login */
-.login{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-.formLogin{
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+body {
+    margin: 0;
+    min-height: 100vh;
+    padding: 32px;
+    font-family: "Manrope", sans-serif;
+    color: var(--ink);
+    background:
+        radial-gradient(circle at 18% 12%, rgba(119, 61, 190, 0.12), transparent 36%),
+        radial-gradient(circle at 82% 88%, rgba(119, 61, 190, 0.08), transparent 36%),
+        var(--surface);
 }
 
-/**/
-button[type="submit"] {
-    background-color: #773dbe;
-    color: white;
-    border: none ;
-    padding: 10px 15px;
+.authShell {
+    width: min(1200px, 100%);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: minmax(280px, 400px) 1px minmax(560px, 1fr);
+    gap: 28px;
+    align-items: start;
+}
+
+.divisorMeio {
+    width: 1px;
+    height: 100%;
+    min-height: 560px;
+    background: linear-gradient(to bottom, transparent, var(--ink), transparent);
+    opacity: 0.35;
+}
+
+.login {
+    align-self: center;
+    border: 1px solid rgba(0, 0, 0, 0.08);
     border-radius: 20px;
-    cursor: pointer;
+    background: var(--surface);
+    padding: 28px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+    animation: panelEnter 480ms ease;
 }
-.selectBoxLine1{
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-    align-items: center;
+
+.panelHeader {
+    margin-bottom: 20px;
 }
-.selectBoxLine2{
-    display: flex;
-    flex-direction: row;
-    gap: 20px;
-    align-items: center;
+
+.eyebrow {
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 11px;
+    color: rgba(0, 0, 0, 0.7);
 }
-.selectBoxLine2Dois{
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-    align-items: center;}
-.selectBoxs{
+
+.login h1,
+.cadastro h1 {
+    margin: 8px 0 6px;
+    font-family: "Teko", sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    font-size: clamp(2rem, 4vw, 2.6rem);
+    line-height: 1;
+}
+
+.subtitle {
+    margin: 0;
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.72);
+}
+
+.formLogin,
+.formCadastro,
+.esquerda,
+.direita {
     display: flex;
     flex-direction: column;
+}
+
+.formLogin,
+.formCadastro {
+    gap: 10px;
+}
+
+.formLogin label,
+.formCadastro label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+}
+
+input,
+select {
+    height: 44px;
+    width: 100%;
+    padding: 0 12px;
+    border-radius: 10px;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    font-family: "Manrope", sans-serif;
+    transition: border-color 180ms ease, box-shadow 180ms ease;
+}
+
+input:focus,
+select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(119, 61, 190, 0.14);
+}
+
+.selectBoxs {
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.checkLine {
+    display: inline-flex;
     align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    text-transform: none;
+    letter-spacing: 0.01em;
+    font-weight: 500;
+}
+
+.checkLine input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    accent-color: var(--primary);
+}
+
+.actionsRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
+button[type="submit"] {
+    background: var(--primary);
+    color: #ffffff;
+    border: 1px solid transparent;
+    border-radius: 12px;
+    padding: 11px 18px;
+    font-family: "Manrope", sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    transition: transform 180ms ease, box-shadow 180ms ease, filter 180ms ease;
+}
+
+button[type="submit"]:hover {
+    filter: brightness(1.02);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(119, 61, 190, 0.3);
+}
+
+button[type="submit"]:active {
+    transform: translateY(0);
+}
+
+.cadastro {
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 20px;
+    background: var(--surface);
+    padding: 28px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
+    animation: panelEnter 560ms ease;
+}
+
+.dadosForm {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+
+.esquerda,
+.direita {
+    gap: 8px;
+}
+
+.btncadastro {
+    align-self: center;
+    margin-top: 8px;
+}
+
+@keyframes panelEnter {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 1024px) {
+    .authShell {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+
+    .divisorMeio {
+        width: 100%;
+        height: 1px;
+        min-height: 1px;
+        background: linear-gradient(to right, transparent, var(--ink), transparent);
+    }
+
+    .login,
+    .cadastro {
+        max-width: 760px;
+        width: 100%;
+        margin: 0 auto;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: 20px 14px;
+    }
+
+    .login {
+        padding: 20px;
+    }
+
+    .dadosForm {
+        grid-template-columns: 1fr;
+    }
+
+    .actionsRow {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .actionsRow .checkLine {
+        justify-content: flex-start;
+    }
+
+    .actionsRow button {
+        width: 100%;
+    }
 }
