@@ -5,22 +5,28 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cadastro de Farmacêutico</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700&family=Teko:wght@500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{{ asset('css/CadastroFarmaceutico.css') }}">
 </head>
 
 <body>
 
+<main class="page">
+<a class="voltarInicio" href="{{ route('pagina-inicial') }}" aria-label="Voltar para página inicial">
+	<span class="seta" aria-hidden="true">&larr;</span>
+	<span>Voltar</span>
+</a>
 <h1 class="titulo">Cadastro de Farmacêutico</h1>
 
 <div class="container">
 
-<h3>Registro Profissional</h3>
+<label for="crf">Número do CRF</label>
+<input id="crf" type="text" placeholder="Digite o número do CRF">
 
-<label>Número do CRF</label>
-<input type="text" placeholder="Digite o número do CRF">
-
-<label>UF do CRF</label>
-<select>
+<label for="uf-crf">UF do CRF</label>
+<select id="uf-crf">
 <option value="">Selecione</option>
 <option>AC</option>
 <option>AL</option>
@@ -54,6 +60,8 @@
 <button class="finalizar">Finalizar Cadastro</button>
 
 </div>
+
+</main>
 
 </body>
 </html>

@@ -28,6 +28,7 @@
             <div class="navDireita">
                 <button class="cinza" onclick="window.location.href='{{ route('cadastro-farmaceutico') }}'">Área do Farmacêutico</button>
                 <button class="cinza" onclick="window.location.href='{{ route('estoque-medicamento') }}'">Gerenciar Ponto de Coleta</button>
+                <button class="cinza" onclick="window.location.href='{{ route('validar-doacao') }}'">Validar Doação</button>
             </div>
     </nav>
 
@@ -90,5 +91,21 @@
         </aside>
 
     </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const pontos = document.querySelectorAll('.listaPontosItens .PontoColeta');
+
+            pontos.forEach(function (ponto) {
+                ponto.addEventListener('click', function () {
+                    pontos.forEach(function (item) {
+                        item.classList.remove('ativo');
+                    });
+
+                    ponto.classList.add('ativo');
+                });
+            });
+        });
+    </script>
 </body>
 </html>

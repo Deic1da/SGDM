@@ -1,107 +1,294 @@
-body{
-font-family: Arial, Helvetica, sans-serif;
-background:#f2f2f2;
-margin:0;
-text-align:center;
+:root {
+	--primary: #773dbe;
+	--ink: #000000;
+	--surface: #ffffff;
+	--line: #ccc;
 }
 
-.titulo{
-margin-top:60px;
-font-size:48px;
-font-weight:500;
+* {
+	box-sizing: border-box;
 }
 
-.busca{
-margin-top:20px;
+body {
+	margin: 0;
+	min-height: 100vh;
+	padding: 32px 16px;
+	background: #ffffff;
+	font-family: "Manrope", sans-serif;
+	color: var(--ink);
+	position: relative;
 }
 
-.busca input{
-padding:10px 20px;
-border-radius:25px;
-border:1px solid #ccc;
-width:260px;
+.voltarInicio {
+	position: absolute;
+	top: 24px;
+	left: 16px;
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	padding: 9px 12px;
+	border-radius: 12px;
+	border: 1px solid rgba(0, 0, 0, 0.12);
+	background: #ffffff;
+	color: var(--ink);
+	text-decoration: none;
+	font-size: 12px;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	font-weight: 700;
+	transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
 }
 
-.container{
-margin-top:80px;
-display:flex;
-justify-content:center;
-align-items:flex-start;
-gap:80px;
+.voltarInicio .seta {
+	font-size: 15px;
+	line-height: 1;
 }
 
-.dados-medicamento{
-display:flex;
-flex-direction:column;
-gap:15px;
-width:300px;
-text-align:left;
+.voltarInicio:hover {
+	transform: translateY(-1px);
+	border-color: var(--primary);
+	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
 }
 
-.dados-medicamento input{
-padding:10px;
-border-radius:6px;
-border:1px solid #ccc;
+.paginaValidacao {
+	width: min(1120px, 100%);
+	margin: 0 auto;
 }
 
-.tipo{
-display:flex;
-background:#ddd;
-border-radius:25px;
-overflow:hidden;
+.titulo {
+	margin: 0;
+	text-align: center;
+	font-family: "Teko", sans-serif;
+	font-size: clamp(2.2rem, 4vw, 3.1rem);
+	line-height: 1;
+	letter-spacing: 0.04em;
 }
 
-.tipo span{
-flex:1;
-padding:10px;
-text-align:center;
-cursor:pointer;
+.busca {
+	margin-top: 14px;
+	display: flex;
+	justify-content: center;
 }
 
-.ativo{
-background:white;
+.busca input {
+	height: 42px;
+	width: min(360px, 100%);
+	border-radius: 12px;
+	border: 1px solid var(--line);
+	padding: 0 12px;
+	padding-right: 38px;
+	font-family: "Manrope", sans-serif;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E");
+	background-repeat: no-repeat;
+	background-position: right 12px center;
 }
 
-.check{
-display:flex;
-align-items:center;
-gap:10px;
+.busca input:focus,
+input[type="text"]:focus,
+input[type="date"]:focus,
+textarea:focus {
+	outline: none;
+	border-color: var(--primary);
+	box-shadow: 0 0 0 3px rgba(119, 61, 190, 0.14);
 }
 
-.dados-doador{
-display:flex;
-flex-direction:column;
-gap:15px;
-width:260px;
-text-align:left;
+.container {
+	margin-top: 22px;
+	padding: 22px;
+	border: 1px solid rgba(0, 0, 0, 0.08);
+	border-radius: 20px;
+	box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+	display: grid;
+	grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.85fr);
+	gap: 20px;
 }
 
-.botoes{
-display:flex;
-gap:15px;
+.dados-medicamento,
+.dados-doador {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	text-align: left;
 }
 
-.aprovar{
-background:#6c4bb6;
-color:white;
-border:none;
-padding:10px 20px;
-border-radius:20px;
-cursor:pointer;
+.dados-medicamento {
+	padding-right: 18px;
+	border-right: 1px solid rgba(0, 0, 0, 0.12);
 }
 
-.reprovar{
-background:red;
-color:white;
-border:none;
-padding:10px 20px;
-border-radius:20px;
-cursor:pointer;
+.dados-doador {
+	padding-left: 2px;
 }
 
-textarea{
-height:80px;
-padding:10px;
-border-radius:6px;
-border:1px solid #ccc;
+.dados-medicamento h3,
+.dados-doador h3 {
+	margin: 0 0 2px;
+	font-family: "Teko", sans-serif;
+	font-size: 20px;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+	line-height: 1;
+	text-align: center;
+}
+
+label {
+	font-size: 12px;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	font-weight: 700;
+}
+
+input[type="text"],
+input[type="date"],
+textarea {
+	width: 100%;
+	height: 44px;
+	padding: 0 12px;
+	border-radius: 10px;
+	border: 1px solid var(--line);
+	font-family: "Manrope", sans-serif;
+}
+
+.tipo {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 8px;
+	margin-top: 2px;
+}
+
+.tipo button {
+	padding: 10px 8px;
+	text-align: center;
+	border: 1px solid var(--line);
+	border-radius: 10px;
+	font-size: 13px;
+	font-weight: 700;
+	background: #f4f4f4;
+	cursor: pointer;
+	font-family: "Manrope", sans-serif;
+	transition: transform 180ms ease, border-color 180ms ease, background-color 180ms ease;
+}
+
+.tipo button:hover {
+	transform: translateY(-1px);
+	border-color: var(--primary);
+}
+
+.tipo .ativo {
+	background: #f3eaff;
+	border-color: var(--primary);
+	color: var(--primary);
+}
+
+.check {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	font-size: 13px;
+}
+
+.check input {
+	width: 16px;
+	height: 16px;
+	accent-color: var(--primary);
+}
+
+.check span {
+	font-weight: 500;
+}
+
+.botoes {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 10px;
+}
+
+.aprovar,
+.reprovar {
+	border: none;
+	padding: 11px 14px;
+	border-radius: 12px;
+	color: #ffffff;
+	cursor: pointer;
+	font-size: 13px;
+	font-weight: 700;
+	font-family: "Manrope", sans-serif;
+	transition: transform 180ms ease, box-shadow 180ms ease, filter 180ms ease;
+}
+
+.aprovar {
+	background: var(--primary);
+}
+
+.reprovar {
+	background: #e63946;
+}
+
+.aprovar:disabled,
+.reprovar:disabled {
+	background: #9a9a9a;
+	color: #f4f4f4;
+	cursor: not-allowed;
+	box-shadow: none;
+	filter: none;
+	transform: none;
+}
+
+.aprovar:hover,
+.reprovar:hover {
+	transform: translateY(-1px);
+	filter: brightness(1.02);
+	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.14);
+}
+
+.reprovar:disabled:hover {
+	transform: none;
+	filter: none;
+	box-shadow: none;
+}
+
+.aprovar:disabled:hover {
+	transform: none;
+	filter: none;
+	box-shadow: none;
+}
+
+textarea {
+	height: 96px;
+	padding-top: 10px;
+	resize: vertical;
+}
+
+@media (max-width: 900px) {
+	.container {
+		grid-template-columns: 1fr;
+		padding: 16px;
+	}
+
+	.dados-medicamento {
+		padding-right: 0;
+		border-right: none;
+		border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+		padding-bottom: 14px;
+	}
+}
+
+@media (max-width: 640px) {
+	body {
+		padding: 16px 12px;
+	}
+
+	.voltarInicio {
+		position: static;
+		margin-bottom: 10px;
+	}
+
+	.botoes {
+		grid-template-columns: 1fr;
+	}
+
+	.tipo {
+		grid-template-columns: 1fr;
+	}
 }

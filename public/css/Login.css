@@ -15,10 +15,7 @@ body {
     padding: 32px;
     font-family: "Manrope", sans-serif;
     color: var(--ink);
-    background:
-        radial-gradient(circle at 18% 12%, rgba(119, 61, 190, 0.12), transparent 36%),
-        radial-gradient(circle at 82% 88%, rgba(119, 61, 190, 0.08), transparent 36%),
-        var(--surface);
+    background: #ffffff;
 }
 
 .authShell {
