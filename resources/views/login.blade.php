@@ -23,19 +23,13 @@
             <input type="email" id="email" name="email" placeholder="xxx@xxx.xxx" required>
 
             <label for="senha">Senha</label>
-            <input type="password" id="senha" name="password" placeholder="********" required>
+            <div class="passwordField">
+                <input type="password" id="senha" name="password" placeholder="********" required>
+                <button type="button" class="toggleSenha" data-target="senha" aria-label="Mostrar senha" aria-pressed="false"></button>
+            </div>
 
             <div class="selectBoxs">
-                <label class="checkLine" for="mostrarSenha">
-                    <input type="checkbox" id="mostrarSenha" name="mostrarSenha">
-                    <span>Mostrar Senha</span>
-                </label>
-
                 <div class="actionsRow">
-                    <label class="checkLine" for="manterLogin">
-                        <input type="checkbox" id="manterLogin" name="manterLogin">
-                        <span>Manter Login</span>
-                    </label>
                     <button type="submit">Entrar</button>
                 </div>
             </div>
@@ -60,9 +54,15 @@
                     <label for ="telefone">Telefone</label>
                     <input type="text" id="telefone" name="telefone" placeholder="(00) 00000-0000">
                     <label for="cadastroSenha">Senha</label>
-                <input type="password" id="cadastroSenha" name="password" placeholder="Mínimo 8 caracteres">
+                    <div class="passwordField">
+                        <input type="password" id="cadastroSenha" name="password" placeholder="Mínimo 8 caracteres">
+                        <button type="button" class="toggleSenha" data-target="cadastroSenha" aria-label="Mostrar senha" aria-pressed="false"></button>
+                    </div>
                 <label for="confirmarSenha">Confirmar Senha</label>
-                <input type="password" id="confirmarSenha" name="password_confirmation" placeholder="********">
+                    <div class="passwordField">
+                        <input type="password" id="confirmarSenha" name="password_confirmation" placeholder="********">
+                        <button type="button" class="toggleSenha" data-target="confirmarSenha" aria-label="Mostrar senha" aria-pressed="false"></button>
+                    </div>
             </div>
             <div class="direita">
                 
@@ -121,17 +121,27 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const mostrarSenha = document.getElementById('mostrarSenha');
-            const senha = document.getElementById('senha');
+            const botoesToggle = document.querySelectorAll('.toggleSenha[data-target]');
 
-            if (!mostrarSenha || !senha) return;
+            botoesToggle.forEach(function (botao) {
+                const inputId = botao.getAttribute('data-target');
+                const campoSenha = document.getElementById(inputId);
+                if (!campoSenha) return;
 
-            const alternarVisibilidade = function () {
-                senha.type = mostrarSenha.checked ? 'text' : 'password';
-            };
+                const atualizarEstadoToggle = function () {
+                    const visivel = campoSenha.type === 'text';
+                    botao.classList.toggle('is-visible', visivel);
+                    botao.setAttribute('aria-pressed', String(visivel));
+                    botao.setAttribute('aria-label', visivel ? 'Ocultar senha' : 'Mostrar senha');
+                };
 
-            mostrarSenha.addEventListener('change', alternarVisibilidade);
-            mostrarSenha.addEventListener('input', alternarVisibilidade);
+                botao.addEventListener('click', function () {
+                    campoSenha.type = campoSenha.type === 'password' ? 'text' : 'password';
+                    atualizarEstadoToggle();
+                });
+
+                atualizarEstadoToggle();
+            });
         });
     </script>
 </body>
