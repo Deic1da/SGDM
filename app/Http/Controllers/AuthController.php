@@ -2,38 +2,58 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\RegisterUserRequest;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 
 class AuthController extends Controller
 {
 
-    public function register(Request $request)
+    public function register(RegisterUserRequest $request)
     {
-        // Validação
-        $request->validate([
-            'nome_completo' => 'required',
-            'cpf' => 'required|unique:usuarios',
-            'email' => 'required|email|unique:usuarios',
-            'password' => 'required|min:8|confirmed',
-        ]);
+        $dados = $request->validated();
+
+        $senha = mb_strtolower($dados['password']);
+        $cpf = (string) $dados['cpf'];
+        $emailLocal = mb_strtolower(explode('@', (string) $dados['email'])[0]);
+
+        $partesNome = preg_split('/\s+/', mb_strtolower((string) $dados['nome_completo'])) ?: [];
+        $tokensNome = array_values(array_filter($partesNome, fn ($parte) => mb_strlen($parte) >= 3));
+
+        foreach ($tokensNome as $tokenNome) {
+            if (str_contains($senha, $tokenNome)) {
+                return back()
+                    ->withErrors(['password' => 'A senha nao pode conter partes do seu nome.'])
+                    ->withInput();
+            }
+        }
+
+        if (str_contains($senha, $cpf)) {
+            return back()
+                ->withErrors(['password' => 'A senha nao pode conter o CPF.'])
+                ->withInput();
+        }
+
+        if ($emailLocal !== '' && str_contains($senha, $emailLocal)) {
+            return back()
+                ->withErrors(['password' => 'A senha nao pode conter o e-mail.'])
+                ->withInput();
+        }
 
         // Criar usuário
         User::create([
-            'nome_completo' => $request->nome_completo,
-            'cpf' => $request->cpf,
-            'email' => $request->email,
-            'telefone' => $request->telefone,
-            'password' => $request->password,
-
-            'cep' => $request->cep,
-            'logradouro' => $request->logradouro,
-            'numero' => $request->numero,
-            'bairro' => $request->bairro,
-            'municipio' => $request->municipio,
-            'estado' => $request->estado,
+            'nome_completo' => $dados['nome_completo'],
+            'cpf' => $dados['cpf'],
+            'email' => $dados['email'],
+            'telefone' => $dados['telefone'] ?? null,
+            'password' => $dados['password'],
+            'cep' => $dados['cep'],
+            'logradouro' => $dados['logradouro'],
+            'numero' => $dados['numero'],
+            'bairro' => $dados['bairro'],
+            'municipio' => $dados['municipio'],
+            'estado' => $dados['estado'],
         ]);
 
         return redirect('/');

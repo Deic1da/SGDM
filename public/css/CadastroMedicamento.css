@@ -72,6 +72,38 @@ h1 {
 	line-height: 1;
 }
 
+.feedback {
+	padding: 10px 12px;
+	border-radius: 10px;
+	margin: 0 auto 14px;
+	width: min(980px, 100%);
+	font-size: 13px;
+}
+
+.feedback.sucesso {
+	background: #eaf9ee;
+	border: 1px solid #9ed8ae;
+	color: #1d6a34;
+}
+
+.feedback.erro {
+	background: #fff0f0;
+	border: 1px solid #f0b6b6;
+	color: #8a2222;
+}
+
+.feedback ul {
+	margin: 0;
+	padding-left: 18px;
+}
+
+.campoErro {
+	display: block;
+	margin-top: 4px;
+	font-size: 12px;
+	color: #8a2222;
+}
+
 .grid {
 	display: grid;
 	grid-template-columns: 1.2fr 0.8fr 0.9fr;

@@ -1,0 +1,923 @@
+<NOME DO SISTEMA>
+<NOME DA EMPRESA>
+Documento de Requisitos
+Sistema de Gerenciamento de Doações de Medicamentos (SGDM)
+Melquisedeque Gomes da Silva Santos/Nelson Ruã
+
+================================================================================
+Sumário
+================================================================================
+1. INTRODUÇÃO
+   1.1 VISÃO GERAL DO DOCUMENTO
+   1.2 CONVENÇÕES, TERMOS E ABREVIAÇÕES
+      1.2.1 Identificação dos requisitos
+      1.2.2 Prioridades dos requisitos
+2. DESCRIÇÃO GERAL DO SISTEMA
+   2.1 ABRANGÊNCIA E SISTEMAS RELACIONADOS
+3. REQUISITOS FUNCIONAIS (CASOS DE USO)
+4. REQUISITO NÃO FUNCIONAL
+5. REQUISITO DE SEGURANÇA
+6. MATRIZ DE AVALIAÇÃO DE RISCO
+7. MATRIZ DE RASTREABILIDADE – REQUISITO FUNCIONAL
+8. PONTO DE FUNÇÃO
+9. REFERÊNCIAS
+
+Documento de Requisitos  Página 2 de 23
+
+================================================================================
+1. Introdução
+================================================================================
+
+Este documento especifica os requisitos do sistema Sistema de Gerenciamento de Doações
+de Medicamentos (SGDM), fornecendo aos desenvolvedores as informações necessárias
+para o projeto e implementação, assim como para a realização dos testes e homologação do
+sistema.
+
+1.1 Visão geral do documento
+
+Além desta seção introdutória, as seções seguintes estão organizadas como descrito abaixo.
+
+1. Seção 2 – Descrição geral do sistema: apresenta uma visão geral do sistema,
+   caracterizando qual é o seu escopo e descrevendo seus usuários.
+
+2. Seção 3 – Requisitos funcionais (casos de uso): especifica todos os casos de uso do
+   sistema, descrevendo os fluxos de eventos, prioridades, atores, entradas e saídas de cada
+   caso de uso a ser implementado.
+
+3. Seção 4 – Requisitos não-funcionais: especifica todos os requisitos não funcionais do
+   sistema, divididos em requisitos de usabilidade, confiabilidade, desempenho, segurança,
+   distribuição, adequação a padrões e requisitos de hardware e software.
+
+4. Seção 5 – Matriz de rastreabilidade: registra a ligação dos requisitos dependentes.
+
+5. Seção 6 – Requisitos de Segurança: especifica todos os requisitos de segurança
+   relacionados aos requisitos funcionais e não funcionais.
+
+6. Seção 7 – Matriz de Avaliação de Risco: registra os riscos de uma falha de requisito.
+
+7. Seção 8 – Referências: apresenta referências para outros documentos utilizados para
+   a confecção deste documento.
+
+--------------------------------------------------------------------------------
+1.2 Convenções, termos e abreviações
+--------------------------------------------------------------------------------
+
+A correta interpretação deste documento exige o conhecimento de algumas convenções e
+termos específicos, que são descritos a seguir.
+
+1.2.1 Identificação dos requisitos
+
+Por convenção, a referência a requisitos é feita através do nome da subseção onde eles estão
+descritos, seguidos do identificador do requisito, de acordo com a especificação a seguir:
+[nome da subseção. identificador do requisito]. Por exemplo, o requisito funcional
+[Recuperação de dados.RF016] deve estar descrito em uma subseção chamada
+"Recuperação de dados", em um bloco identificado pelo número [RF016]. Já o requisito
+não-funcional [Confiabilidade.NF008] deve estar descrito na seção de requisitos
+não-funcionais de Confiabilidade, em um bloco identificado por [NF008]. [RS001] trata dos
+requisitos de segurança.
+
+Os requisitos devem ser identificados com um identificador único. A numeração inicia com o
+identificador [RF001], [NF001] ou [RS001] e prossegue sendo incrementada à medida que
+forem surgindo novos requisitos.
+
+Documento de Requisitos  Página 3 de 23
+
+1.2.2 Prioridades dos requisitos
+
+Para estabelecer a prioridade dos requisitos, nas seções 4 e 5, foram adotadas as
+denominações "essencial", "importante" e "desejável".
+
+8. Essencial é o requisito sem o qual o sistema não entra em funcionamento. Requisitos
+   essenciais são requisitos imprescindíveis, que têm que ser implementados
+   impreterivelmente.
+
+9. Importante é o requisito sem o qual o sistema entra em funcionamento, mas de
+   forma não satisfatória. Requisitos importantes devem ser implementados, mas, se não
+   forem, o sistema poderá ser implantado e usado mesmo assim.
+
+10. Desejável é o requisito que não compromete as funcionalidades básicas do sistema,
+    isto é, o sistema pode funcionar de forma satisfatória sem ele. Requisitos desejáveis podem
+    ser deixados para versões posteriores do sistema, caso não haja tempo hábil para
+    implementá-los na versão que está sendo especificada.
+
+================================================================================
+2. Descrição geral do sistema
+================================================================================
+
+2.1 Abrangência e sistemas relacionados
+
+O sistema não permitirá a troca direta de medicamentos entre pessoas físicas, pois tal
+prática é proibida pela legislação sanitária. Em vez disso, o processo ocorrerá em duas etapas
+mediadas por pontos credenciados (farmácias, postos de saúde, ONGs):
+
+1. Coleta: O aplicativo conectará o doador (pessoa física) a um ponto de coleta credenciado
+   para a entrega do medicamento.
+
+2. Redistribuição: Após a validação do medicamento por um farmacêutico na entidade, o
+   sistema permitirá que o receptor (pessoa física necessitada) visualize o estoque disponível e
+   encontre o ponto de retirada mais próximo.
+
+Documento de Requisitos  Página 4 de 23
+
+================================================================================
+3. Requisitos funcionais (casos de uso)
+================================================================================
+
+ID: RF001
+Descrição: Cadastro de Usuários (Pessoa Física)
+
+Requisito responsável pelo cadastramento de usuários pessoa física. O usuário PF
+pode atuar como Usuário Comum (Doador ou Receptor de medicamentos) ou
+como base para o perfil de Farmacêutico (RF003). O cadastro é obrigatório para
+fins de responsabilização.
+
+Campos de Dados (Entrada):
+  Nome Completo: String
+* CPF: String; (formato: xxx.xxx.xxx-xx) [1]
+* E-mail: String [2]
+* Telefone para Contato: String; (formato: (xx) xxxxx-xxxx)
+* Endereço (para fins de geolocalização):
+    - CEP: String; (formato: xxxxx-xxx) [3]
+    - Logradouro: String
+    - Número: String
+    - Bairro: String
+    - Município: String
+    - Estado: String
+* Status: Enum; (Ativo, Inativo) [4]
+* Senha: String; (criptografada) [5]
+
+Regras e Observações:
+1. Validação de CPF: O sistema deve validar se o número do CPF digitado segue o
+   padrão correto.
+2. Validação de E-mail: O e-mail deve ser único no sistema e ter formato válido.
+3. Preenchimento por CEP: O sistema deve ter a capacidade de preencher os
+   campos de endereço automaticamente a partir da inserção do CEP, consumindo um
+   webservice externo.
+4. Status do Usuário: O status controla se o usuário pode ou não interagir com o
+   sistema. A exclusão de um usuário deve apenas alterar seu status para "Inativo"
+   para manter o histórico de doações/recebimentos.
+5. Senha: A senha deve ser criada de forma a garantir a segurança do acesso ao
+   sistema, obedecendo aos seguintes critérios:
+    - Mínimo de 8 caracteres;
+    - Deve conter ao menos uma letra maiúscula (A–Z);
+    - Deve conter ao menos uma letra minúscula (a–z);
+    - Deve conter ao menos um número (0–9);
+    - Deve conter ao menos um caractere especial, como ! @ # $ % & *;
+    - Não pode conter espaços;
+    - Não pode ser igual ao nome, e-mail ou CPF do usuário;
+    - A senha deve ser armazenada de forma criptografada (exemplo, utilizando o
+      algoritmo bcrypt).
+
+• Alteração: Permitida pelo próprio usuário para seus dados cadastrais, exceto CPF.
+  O histórico de alterações deve ser mantido.
+• Exclusão: Não será permitida a exclusão física dos registros. O usuário poderá ser
+  desativado, mudando o campo Status para "Inativo".
+• Pesquisa: A pesquisa de usuários será restrita a administradores do sistema por
+  motivos de privacidade.
+
+Documento de Requisitos  Página 5 de 23
+
+--------------------------------------------------------------------------------
+ID: RF002
+Descrição: Cadastro de Entidades (Ponto de Coleta)
+--------------------------------------------------------------------------------
+
+Requisito responsável pelo cadastramento das entidades que funcionarão como
+pontos de coleta e redistribuição (farmácias, postos de saúde ou ONGs). A
+entidade é o intermediador obrigatório para a doação, pois a troca direta entre
+pessoas físicas é proibida pela legislação sanitária. O cadastro será validado pela
+equipe para garantir a legalidade da instituição.
+
+Usuários pessoa física poderão solicitar o credenciamento de uma entidade
+vinculada ao seu CPF, fornecendo os dados exigidos abaixo.
+A entidade iniciará com status "Pendente" até análise da equipe.
+Após aprovação, o usuário passa a ter acesso ao painel de Ponto de Coleta.
+
+Documento de Requisitos  Página 6 de 23
+
+Campos de Dados (Entrada):
+* Razão Social: String
+* Nome Fantasia: String
+* CNPJ: String; (formato: xx.xxx.xxx/xxxx-xx) [1]
+* ID do Dono da Entidade (Usuário Comum): String (FK para RF001)
+* ID do Farmacêutico Responsável Técnico (RT): String (FK para Vínculo RF004) [2]
+* Horário de Funcionamento: String
+* Endereço: (campos detalhados de endereço, conforme RF001)
+* Aceita Medicamentos com Validade Curta (7 dias): Boolean [3]
+* Status: Enum; (Pendente, Aprovado, Reprovado, Inativo) [4]
+
+Regras e Observações:
+1. Validação de CNPJ: O sistema deve validar se o número do CNPJ digitado segue
+   o padrão correto.
+2. Responsabilidade Técnica: Toda entidade deve ter exatamente um
+   Farmacêutico Responsável Técnico (RT) ativo associado, vinculado via RF004, para
+   validar os medicamentos recebidos. A designação de um RT é obrigatória para o
+   cumprimento do requisito de Conformidade Legal (RNF006).
+3. Exceção de Validade: Este campo permite que a entidade configure se aceita ou
+   não medicamentos com prazo de validade de até 7 dias, em casos de alta demanda.
+4. Fluxo de Aprovação: Uma nova entidade cadastrada inicia com status
+   "Pendente". Apenas após aprovação da equipe o status muda para "Aprovado" e
+   a entidade fica visível no mapa (RF009).
+
+• Alteração: Realizada somente por usuários administradores da entidade ou da
+  equipe. O histórico de alterações deve ser mantido (RF007).
+• Exclusão: Não será realizada a exclusão física. O status da entidade será
+  alterado para "Inativo".
+• Pesquisa: Permitida para administradores do sistema e para usuários finais
+  através do mapa interativo (RF009).
+
+Documento de Requisitos  Página 7 de 23
+
+--------------------------------------------------------------------------------
+ID: RF003
+Descrição: Cadastro de Farmacêuticos
+--------------------------------------------------------------------------------
+
+Requisito novo e essencial que formaliza o perfil do Farmacêutico (usuário Pessoa
+Física cadastrado via RF001) como o único profissional autorizado a realizar as
+operações de validação (RF005) e entrega (RF006) de medicamentos no sistema.
+Este requisito estabelece a base para o controle de acesso técnico, mitigando o
+risco de acesso não autorizado.
+
+Campos de Dados (Entrada):
+* ID do Usuário (PF): String (FK para RF001)
+* Nome Completo: String (Herdado do RF001)
+* Nº de Inscrição no CRF: String [1]
+* UF do CRF: Enum; (Enumeração de Unidades Federativas) [2]
+* Status Profissional: Enum (Ativo, Suspenso, Inativo)
+
+Regras e Observações:
+1. Validação e Formato do CRF: O sistema deve validar se o número do CRF é um
+   identificador único e segue o padrão definido pelo Conselho Federal de Farmácia.
+   Este registro é fundamental para a responsabilização (RF007).
+2. Obrigatoriedade e Vínculo: O registro do CRF e da UF é obrigatório para que o
+   usuário possa ser convidado e vinculado a uma entidade (RF004) e exercer as
+   funções de Responsável Técnico ou Farmacêutico Normal.
+
+• Base de Permissão: Este cadastro é a base para o Controle de Acesso Baseado
+  em Papéis, garantindo que apenas profissionais credenciados (RF003) possam
+  inspecionar e registrar a movimentação de medicamentos (RF005, RF006). Esta
+  mediação é crucial para o cumprimento da legislação sanitária brasileira, que
+  exige que todo medicamento seja validado por um farmacêutico antes de ser
+  disponibilizado para um receptor.
+• Alteração: Permitida ao próprio usuário para dados profissionais e a
+  administradores da equipe. O histórico de alterações deve ser mantido (RF007).
+• Exclusão: Não será realizada a exclusão física. O Status Profissional será
+  alterado para "Inativo" ou "Suspenso", mantendo o registro para fins de
+  auditoria (RF007).
+• Pesquisa: Restrita a administradores do sistema e aos Donos de Entidade (para
+  fins de convite no RF004).
+
+Documento de Requisitos  Página 8 de 23
+
+--------------------------------------------------------------------------------
+ID: RF004
+Descrição: Vincular Farmacêutico à Entidade
+--------------------------------------------------------------------------------
+
+Requisito que implementa o fluxo de associação e o Controle de Acesso Baseado
+em Papéis (RBAC), definindo a hierarquia técnica (RT/Normal) e as permissões de
+gestão e manipulação de medicamentos na Entidade. Este processo é essencial
+para garantir a mediação profissional e a conformidade legal.
+
+Atores: Dono da Entidade (RF002), Farmacêutico (RF003).
+
+Campos de Dados (Vínculo):
+* ID da Entidade: String (FK para RF002)
+* ID do Farmacêutico: String (FK para RF003)
+* Tipo de Vínculo: Enum (Responsável Técnico, Farmacêutico Normal)
+* Status do Vínculo: Enum (Pendente, Aceito, Removido)
+* Data Início: Date
+* Data Fim: Date (Preenchido em caso de remoção ou substituição)
+
+Fluxo de Eventos:
+1. Convite: O Dono da Entidade (RF002) envia um convite formal para um
+   Farmacêutico cadastrado (RF003) se vincular ao Ponto de Coleta.
+2. Aceite/Rejeição: O Farmacêutico deve aceitar o convite antes de ganhar acesso
+   e permissões na entidade.
+3. Designação de Papel: O Dono da Entidade designa qual Farmacêutico vinculado
+   será o Responsável Técnico (RT) ativo no momento ou Farmacêutico Normal.
+4. Remoção/Substituição: Permite a remoção de um farmacêutico e a
+   substituição do RT, mantendo o histórico (RF007).
+
+Regras e Observações:
+1. Controle de RT: Deve haver no mínimo um RT ativo por entidade (RF002),
+   garantindo a Responsabilidade Técnica formal.
+2. Permissões RBAC (Regras de Permissões): Apenas Farmacêuticos (RT ou
+   Normal) podem acessar as funcionalidades críticas de estoque (RF005/RF006). O
+   Dono pode gerenciar os vínculos (RF004), mas não pode validar ou entregar
+   medicamentos, restringindo-se à gestão administrativa, mas se ele for um RT
+   cadastrado na entidade (RF002) ele poderá.
+3. Rastreabilidade (Histórico): O sistema deve manter o histórico de vínculos
+   (quem foi RT ou Normal e quando) mesmo após a remoção do profissional, para
+   garantir a auditabilidade (RNF007) e a responsabilização (RS003).
+
+• Alteração/Remoção: Permitida pelo Dono da Entidade (para todos os vínculos)
+  ou pelo RT (apenas para Farmacêuticos Normais). O registro de alteração de
+  vínculo deve ser mantido no log (RF007).
+
+Documento de Requisitos  Página 9 de 23
+
+--------------------------------------------------------------------------------
+ID: RF005
+Descrição: Validação de Doações
+--------------------------------------------------------------------------------
+
+Requisito novo e essencial que formaliza o processo de inspeção física e registro
+dos medicamentos recebidos pelo Ponto de Coleta (Entidade RF002). A validação
+deve ser realizada por um profissional de saúde, o que é crucial para garantir a
+qualidade do item e mitigar o Risco de medicamento inadequado (RS002).
+
+Atores: Farmacêutico (RT ou Normal).
+
+Fluxo de Eventos / Ações:
+1. Recebimento: O Farmacêutico recebe o medicamento entregue pelo Doador
+   (originado do RF008).
+2. Inspeção: O Farmacêutico inspeciona fisicamente o medicamento, verificando
+   se a data de validade é superior à regra mínima (30 dias) e se a condição da
+   embalagem está conforme as regras (ex: xarope lacrado, cartelas individuais
+   intactas).
+3. Registro da Validação: O Farmacêutico deve registrar se o medicamento está
+   "Aprovado" ou "Rejeitado" no sistema. Se aprovado, as informações da doação
+   são transferidas para o estoque disponível (RF006). Se rejeitado, o item deve ser
+   sinalizado para descarte (RF011).
+
+Campos de Dados (Saída - Log de Validação):
+* ID do Medicamento Doador: String (FK para RF008)
+* ID do Farmacêutico Validador: String (FK para RF003) [1]
+* Status da Validação: Enum (Aprovado, Rejeitado)
+* Motivo da Rejeição: String (Se aplicável)
+* Data e Hora da Validação: Timestamp [2]
+
+Regras e Observações:
+1. Autorização: Apenas Farmacêuticos (RT ou Normal), vinculados via RF004,
+   podem executar esta função. Esta restrição de papel é mandatória para a
+   segurança e a conformidade legal.
+2. Rastreabilidade: Cada validação deve gerar um registro de auditoria completo
+   que identifica o ID do Farmacêutico validador e o Timestamp da operação
+   (RF007). Este registro é vital para a responsabilização em caso de problemas
+   (RS003).
+
+• Integridade dos Dados: A validação obrigatória por um farmacêutico é o
+  mecanismo chave para garantir que o medicamento é seguro e confiável antes
+  que ele apareça como "disponível" no sistema (RNF008).
+• Consequência: Apenas medicamentos aprovados neste fluxo de validação
+  podem compor o estoque gerenciado pelo RF006.
+
+Documento de Requisitos  Página 10 de 23
+
+--------------------------------------------------------------------------------
+ID: RF006
+Descrição: Validação de Doações
+--------------------------------------------------------------------------------
+
+Requisito novo e essencial que formaliza o processo de inspeção física e registro
+dos medicamentos recebidos pelo Ponto de Coleta (Entidade RF002). A validação
+deve ser realizada por um profissional de saúde (RF003), o que é crucial para
+garantir a qualidade do item e mitigar o Risco de medicamento inadequado (RS002).
+
+Atores: Farmacêutico (RT ou Normal).
+
+Fluxo de Eventos / Ações:
+1. Recebimento: O Farmacêutico recebe o medicamento entregue pelo Doador
+   (originado do RF008).
+2. Inspeção: O Farmacêutico inspeciona fisicamente o medicamento, verificando
+   a validade e a condição da embalagem, conforme as regras estabelecidas.
+3. Registro da Validação: O Farmacêutico registra o resultado (Aprovado ou
+   Rejeitado) no sistema.
+
+Campos de Dados (Saída - Log de Validação):
+* ID do Medicamento Doador: String (FK para RF008)
+* ID do Farmacêutico Validador: String (FK para RF003) [1]
+* Status da Validação: Enum (Aprovado, Rejeitado) [2]
+* Motivo da Rejeição: String (Se aplicável)
+* Data e Hora da Validação: Timestamp [3]
+
+Regras e Observações:
+1. Autorização e Rastreabilidade do Farmacêutico: O campo ID do Farmacêutico
+   Validador é obrigatório. Apenas Farmacêuticos (vinculados via RF004) podem
+   executar esta função. Este registro é essencial para a responsabilização (RS003),
+   pois liga o profissional à qualidade do item.
+2. Integridade e Decisão: O campo Status da Validação deve ser registrado de
+   forma clara. A validação obrigatória é o mecanismo chave para garantir que o
+   medicamento é seguro (RNF008) antes de ser adicionado ao estoque disponível
+   (RF006). Se o status for "Rejeitado", o item deve ser sinalizado para descarte
+   (RF011).
+3. Timestamp de Auditoria: O campo Data e Hora da Validação deve ser
+   registrado de forma imutável (RF007), pois serve como prova do momento exato
+   em que a responsabilidade técnica sobre o medicamento foi assumida pelo
+   Farmacêutico.
+
+• Conformidade Legal: Este processo atende ao Requisito Legal (RNF006), que
+  exige que todo medicamento seja validado por um farmacêutico antes da
+  redistribuição.
+
+Documento de Requisitos  Página 11 de 23
+
+--------------------------------------------------------------------------------
+ID: RF007
+Descrição: Histórico e Auditoria de Operações
+--------------------------------------------------------------------------------
+
+Requisito funcional que implementa o Requisito Não Funcional Essencial de
+Auditabilidade e Rastreabilidade (RNF007). É indispensável para fins de
+responsabilização (RS003), garantindo que nenhuma operação crítica seja anônima.
+
+Função Principal: O sistema deve registrar e manter um histórico detalhado e
+imutável (log) de todas as transações críticas (validações, entregas) e alterações
+cadastrais (usuários, entidades, vínculos). A exclusão física de registros é proibida.
+
+Campos de Dados (Saída - Log):
+* ID do Usuário/Farmacêutico/Entidade (Atores): String [1]
+* Tipo de Operação: Enum (Validação, Entrega, Alteração, etc.) [2]
+* Registro Afetado (ID do Item ou Registro): String [3]
+* Descrição da Alteração: String (detalhes do que foi modificado, se for o caso)
+* Data e Hora: Timestamp [4]
+
+Regras e Observações:
+1. Ator Responsável (Quem): O campo ID do Ator é obrigatório para registrar
+   quem realizou a operação (Doador, Receptor, Farmacêutico Validador (RF005),
+   Farmacêutico Entregador (RF006) ou Dono da Entidade (RF004)). Este registro é a
+   base da responsabilização (RS003).
+2. Tipos de Transação (O Quê): O campo Tipo de Operação deve detalhar a ação
+   realizada. Deve incluir, minimamente, todos os fluxos de doação e redistribuição:
+   cadastro de medicamento (RF008), validação (RF005), alteração de status de
+   entidade (RF002), alteração de vínculo (RF004) e entrega final (RF006).
+3. Item Afetado (Onde): O campo Registro Afetado deve ligar a operação a uma
+   entidade ou a um medicamento específico, permitindo a rastreabilidade do ciclo
+   de vida completo do item: doador → medicamento → entidade → farmacêutico
+   validador → receptor.
+4. Imutabilidade e Tempo (Quando): O campo Data e Hora deve ser registrado de
+   forma imutável (Timestamp) para garantir a integridade da auditoria.
+
+• Verificação de Log: O sistema deve oferecer aos administradores a capacidade
+  de consultar esses logs para fins de investigação e auditoria (RNF007).
+
+Documento de Requisitos  Página 12 de 23
+
+--------------------------------------------------------------------------------
+ID: RF008
+Descrição: Cadastrar Medicamento para Doação
+--------------------------------------------------------------------------------
+
+Permite que um Doador (usuário pessoa física cadastrado no RF001) cadastre um
+medicamento que deseja doar. O sistema aplicará regras de negócio para garantir
+a segurança e a conformidade com as normas de doação, bloqueando itens
+inadequados.
+
+Atores: Doador (usuário pessoa física).
+
+Fluxo de Eventos:
+1. O doador seleciona a opção "Doar Medicamento".
+2. O sistema solicita o preenchimento dos dados do medicamento, vinculando o
+   registro ao ID do Doador (RF001) para fins de rastreabilidade (RF007) e
+   responsabilização (RS003).
+3. O sistema valida as informações (Validade e Embalagem) com base nas regras
+   de negócio.
+4. Se o cadastro for aprovado, o sistema orienta o doador a levar o medicamento
+   a um ponto de coleta, acionando a busca (RF009). Se for rejeitado (ex: vencido), o
+   sistema aciona o fluxo de descarte (RF011).
+
+Campos de Dados (Entrada):
+* Nome do Medicamento: String
+* Data de Validade: Date; (formato: mm/aaaa) [1]
+* Forma Farmacêutica: Enum; (Comprimido/Cápsula, Xarope) [2]
+* Condição da Embalagem: String; (Ex: Cartela com 5 de 10 comprimidos, Caixa de
+  xarope lacrada) [3]
+
+Regras e Observações (Validação):
+1. Regra Mínima de Validade: O sistema só deve aceitar o cadastro de
+   medicamentos com, no mínimo, 30 dias para a data de vencimento.
+   Medicamentos vencidos devem ser bloqueados e o sistema deve direcionar o
+   usuário para o descarte correto (RF011).
+2. Formas Aceitas: O sistema deve priorizar doações de comprimidos/cápsulas e
+   xaropes. Outras formas farmacêuticas não são aceitas neste requisito.
+3. Condições da Embalagem: As condições de embalagem são cruciais para a
+   segurança (RS002):
+    - Comprimidos: É aceitável que a cartela tenha sido parcialmente utilizada, desde
+      que as sobras permaneçam em seus compartimentos separados lacrados
+      individualmente.
+    - Xaropes: Só serão aceitos se a caixa do medicamento estiver lacrada.
+
+• Verificação Futura: O sistema pode utilizar um scanner de código de barras ou
+  QR code para registrar a data de validade automaticamente, evitando erros de
+  digitação e enviando alertas de vencimento com antecedência.
+
+Documento de Requisitos  Página 13 de 23
+
+--------------------------------------------------------------------------------
+ID: RF009
+Descrição: Localizar Pontos de Coleta (Mapa Interativo)
+--------------------------------------------------------------------------------
+
+Requisito responsável por exibir em um mapa interativo, de forma similar ao
+Cittamobi, todos os pontos de coleta (entidades aprovadas) cadastrados,
+permitindo que o Doador encontre o local mais próximo para entregar sua doação.
+
+Atores: Doador (usuário pessoa física).
+
+Fluxo de Eventos:
+1. O doador, após cadastrar um medicamento (RF008), ou acessando diretamente
+   a função, visualiza um mapa.
+2. O sistema, utilizando a geolocalização do dispositivo do usuário, centraliza o
+   mapa na localização atual do usuário.
+3. O sistema exibe "pins" representando cada ponto de coleta (Entidade RF002
+   aprovada).
+4. Ao clicar em um "pin", o usuário visualiza informações da entidade (Nome
+   Fantasia, Endereço, Horário de Funcionamento).
+
+Entradas: Geolocalização do usuário.
+Saídas: Visualização do mapa com pontos de coleta e informações detalhadas ao
+selecionar um ponto.
+
+Regras e Observações:
+1. Usabilidade (RNF001): A experiência de uso do mapa deve ser fluida e intuitiva,
+   similar a aplicativos conhecidos pelo público, como o Cittamobi.
+2. Filtro de Status: Apenas as entidades que possuírem o Status "Aprovado" no
+   RF002 devem ser exibidas no mapa, garantindo que o doador seja direcionado a
+   instituições legalizadas.
+3. Função Principal: Este requisito implementa o Mecanismo de Facilitação e
+   Coleta definido nas resoluções, ligando a pessoa física aos pontos credenciados.
+
+Documento de Requisitos  Página 13 de 23
+
+--------------------------------------------------------------------------------
+ID: RF010
+Descrição: Consultar e Localizar Medicamento (Receptor)
+--------------------------------------------------------------------------------
+
+Requisito que permite que um Receptor (usuário pessoa física cadastrado via
+RF001) busque por medicamentos disponíveis nos estoques das entidades
+(Pontos de Coleta) e localize o ponto de retirada mais próximo. Este processo
+garante que o paciente visualize o estoque validado e encontre o ponto de
+retirada através de uma instituição autorizada.
+
+Atores: Receptor (usuário pessoa física).
+
+Fluxo de Eventos:
+1. O receptor acessa a função de busca e utiliza uma barra de pesquisa para
+   digitar ou selecionar o nome de um medicamento.
+2. O sistema verifica, nos estoques gerenciados pelo RF006 das entidades
+   aprovadas (RF002), quais possuem o medicamento solicitado.
+3. O sistema retorna uma lista de entidades que possuem o medicamento em
+   estoque, ordenada pela proximidade geográfica do usuário.
+4. Opcionalmente, o sistema exibe os resultados em um mapa (similar ao RF009),
+   mostrando os pontos de retirada.
+5. O receptor pode selecionar uma entidade para ver detalhes (Endereço, Horário
+   de Funcionamento) e se dirigir ao local para a retirada física.
+
+Entradas: Nome do medicamento, Geolocalização do usuário.
+Saídas: Lista e/ou mapa com as entidades que possuem o medicamento em
+estoque, incluindo endereço e horário de funcionamento.
+
+Regras e Observações:
+1. Filtro de Estoque: Apenas medicamentos que foram previamente validados
+   (RF005) e registrados como disponíveis no estoque (RF006) da entidade devem
+   aparecer nos resultados de busca. O sistema não pode exibir medicamentos que
+   estejam em "aguardando validação" ou que tenham sido rejeitados.
+2. Ordenação por Proximidade: A lista de resultados deve ser ordenada pela
+   proximidade do Ponto de Coleta em relação à localização atual do Receptor. Esta
+   função é crítica para a usabilidade e eficácia do sistema (RNF001).
+3. Anonimato e Mediação: Este requisito é puramente de consulta e localização.
+   A retirada (baixa no estoque) é uma operação que deve ser realizada fisicamente
+   pelo Receptor na Entidade, e o registro da entrega deve ser feito pelo
+   Farmacêutico (RF006), garantindo o anonimato entre doador e receptor e a
+   mediação profissional (RS001).
+
+Documento de Requisitos  Página 14 de 23
+
+--------------------------------------------------------------------------------
+ID: RF011
+Descrição: Direcionar para Descarte Correto
+--------------------------------------------------------------------------------
+
+Requisito que lida com medicamentos que não atendem aos critérios de doação
+(ex: vencidos, ou com embalagem danificada), cumprindo o requisito de
+segurança (RS002) ao mitigar o risco de medicamento inadequado. O sistema
+deve educar o usuário sobre a importância da logística reversa e indicar os pontos
+de descarte adequados.
+
+Atores: Doador (usuário pessoa física).
+
+Fluxo de Eventos:
+1. Durante o cadastro em RF008, se um medicamento for rejeitado por estar
+   vencido, o sistema aciona esta funcionalidade.
+2. O sistema exibe uma mensagem informativa sobre os riscos do descarte
+   incorreto (como o descarte no lixo comum, na pia ou no vaso sanitário, que
+   contamina o solo e lençóis freáticos).
+3. O sistema apresenta um mapa interativo mostrando os pontos de coleta para
+   descarte (Logística Reversa). Estes pontos podem ser os mesmos das doações,
+   mas com a finalidade correta.
+
+Entradas: Medicamento com status "impróprio para doação".
+Saídas: Informações educativas e mapa com pontos de descarte.
+
+Regras e Observações:
+1. Bloqueio Obrigatório: Medicamentos vencidos não podem ser doados e devem
+   ser bloqueados pelo sistema, sendo apenas direcionados para o descarte
+   (Logística Reversa).
+2. Segurança (RS002): Este requisito é essencial para a segurança, pois impede
+   que itens inadequados (que podem ter armazenamento incorreto, por exemplo)
+   entrem no fluxo de doação e cheguem ao receptor, mitigando o risco de uso
+   indevido ou ineficácia.
+3. Conscientização: O aplicativo deve oferecer uma área de educação com dicas
+   sobre como armazenar medicamentos corretamente e informações sobre os
+   riscos ambientais.
+
+Documento de Requisitos  Página 15 de 23
+
+================================================================================
+4. Requisito não Funcional
+================================================================================
+
+ID: [RNF001]
+Requisito: Requisito de Produto – Facilidade de Uso (Usabilidade)
+Descrição: O sistema deve possuir uma interface intuitiva e de fácil entendimento
+para seus diferentes perfis de usuário: doadores, receptores e farmacêuticos das
+entidades. A experiência de uso do mapa interativo, por exemplo, deve ser fluida
+e similar a aplicativos conhecidos pelo público, como o Cittamobi. Isso garante
+que usuários com diferentes níveis de familiaridade com a tecnologia possam
+realizar suas tarefas (doar ou buscar um medicamento) sem dificuldades.
+Prioridade: Importante
+
+ID: [RNF002]
+Requisito: Requisito de Produto – Desempenho e Tempo de Resposta
+Descrição: As funções críticas do sistema, como a exibição do mapa interativo com
+pontos de coleta e a busca por medicamentos disponíveis no estoque das
+entidades, devem apresentar resultados de forma rápida e eficiente. Um tempo de
+resposta lento nessas operações, que são o coração do sistema, pode frustrar o
+usuário e levar ao abandono do aplicativo, tornando-o ineficaz.
+Prioridade: Importante
+
+ID: [RNF003]
+Requisito: Requisito de Produto – Disponibilidade e Confiabilidade
+Descrição: O sistema deve estar disponível para uso 24 horas por dia, 7 dias por
+semana, com um tempo de inatividade mínimo, destinado apenas a manutenções
+programadas. A necessidade de doar ou procurar um medicamento pode surgir a
+qualquer momento, e a alta disponibilidade garante que a plataforma seja uma
+fonte confiável de informação, fortalecendo a confiança dos usuários no serviço.
+Prioridade: Importante
+
+ID: [RNF004]
+Requisito: Requisito de Produto – Compatibilidade e Portabilidade
+Descrição: O sistema deve ser compatível com as plataformas de destino definidas
+pelo projeto. Conforme a pendência a ser definida, se for um aplicativo móvel
+(APK), deverá funcionar nas versões mais recentes dos sistemas operacionais
+Android e iOS. Se for uma aplicação desktop/web, deve ser compatível com os
+principais navegadores do mercado (Chrome, Firefox, Safari). Isso garante que a
+maior parte do público-alvo consiga acessar a solução sem barreiras tecnológicas.
+Prioridade: Essencial
+
+ID: [RNF005]
+Requisito: Requisito Externo – Interoperabilidade
+Descrição: Em versões futuras, o sistema deveria ser capaz de gerar relatórios de
+saúde e planos de medicação que possam ser compartilhados com médicos.
+Aplicativos de referência como o MyTherapy já oferecem essa funcionalidade, que
+agrega grande valor ao demonstrar a importância dos dados coletados para o
+acompanhamento clínico. Essa capacidade de interagir com o ecossistema de
+saúde posicionaria o sistema como uma ferramenta mais completa.
+Prioridade: Desejável
+
+ID: [RNF006]
+Requisito: Requisito Externo – Legais e de Conformidade
+Descrição: O sistema deve operar em estrita conformidade com a legislação
+sanitária brasileira, que proíbe a troca direta de medicamentos entre pessoas
+físicas. Este é um requisito externo que restringe todo o funcionamento do sistema.
+Portanto, a plataforma deve garantir que:
+  1. Todas as doações sejam mediadas por uma entidade credenciada (farmácia,
+     posto de saúde, ONG).
+  2. Todo medicamento doado seja validado por um farmacêutico responsável antes
+     de ser disponibilizado para um receptor.
+O não cumprimento deste requisito torna o sistema ilegal e inviável.
+Prioridade: Essencial
+
+ID: [RNF007]
+Requisito: Requisito Externo – Auditabilidade e Rastreabilidade
+Descrição: O sistema deve registrar e manter um histórico completo e imutável de
+todas as transações críticas. Isso significa que para cada doação, deve ser possível
+rastrear todo o seu ciclo de vida:
+  • Quem foi o doador (vincular ao cadastro de usuário).
+  • Qual medicamento foi doado e quando.
+  • Em qual entidade foi entregue.
+  • Qual farmacêutico validou o medicamento.
+  • Quem foi o receptor.
+Este requisito é fundamental para fins de responsabilização em caso de problemas
+com um medicamento doado.
+Prioridade: Essencial
+
+ID: [RNF008]
+Requisito: Requisito de Produto – Integridade dos Dados
+Descrição: A precisão das informações sobre os medicamentos é crítica para a
+segurança do usuário. O sistema deve garantir a integridade dos dados,
+assegurando que as informações de nome do medicamento, data de validade e
+status (validado, aguardando, retirado) sejam sempre corretas e confiáveis. A
+validação obrigatória por um farmacêutico antes que um medicamento apareça
+como "disponível" é um mecanismo chave para garantir essa integridade.
+Prioridade: Essencial
+
+ID: [RNF009]
+Requisito: Requisito Externo – Privacidade e Proteção de Dados (LGPD)
+Descrição: O sistema armazenará dados pessoais sensíveis, como CPF, nome,
+endereço e, indiretamente, o histórico de saúde dos usuários (medicamentos
+doados ou recebidos). Portanto, deve estar em total conformidade com a Lei Geral
+de Proteção de Dados (LGPD). Isso inclui:
+  • Coletar apenas os dados estritamente necessários.
+  • Obter consentimento claro do usuário.
+  • Garantir a segurança dos dados contra acessos não autorizados.
+  • Permitir que o usuário acesse e gerencie seus próprios dados.
+Prioridade: Essencial
+
+Documento de Requisitos  Página 16 de 23
+
+================================================================================
+5. Requisito de Segurança
+================================================================================
+
+ID: [RS001]
+Perigo: O maior perigo é que a plataforma seja usada para a troca direta de
+medicamentos entre pessoas físicas, uma prática proibida pela legislação sanitária
+brasileira.
+Soluções: Para mitigar este perigo, o sistema deve ser projetado para impedir
+ativamente a comunicação direta e garantir a mediação profissional:
+  1. O sistema não deve possuir nenhuma funcionalidade de chat ou troca de
+     contatos entre doadores e receptores.
+  2. O fluxo de doação deve ser obrigatoriamente mediado por uma entidade
+     credenciada (farmácia, posto de saúde, ONG).
+  3. O sistema deve garantir o anonimato entre doador e receptor, conectando o
+     usuário apenas à instituição.
+
+ID: [RS002]
+Perigo: Risco de doação de um medicamento inadequado, como um item vencido,
+com embalagem danificada (ex: xarope aberto) ou mal conservado, o que representa
+um grave risco à saúde do receptor.
+Soluções: Para garantir a qualidade e a segurança dos medicamentos, o sistema
+deve implementar uma dupla camada de verificação:
+  1. Todo medicamento deve ser fisicamente inspecionado e validado por um
+     farmacêutico responsável antes de ser disponibilizado para um novo receptor.
+  2. O sistema deve bloquear o cadastro de medicamentos já vencidos no momento
+     em que o doador tenta registrá-lo, direcionando-o para o descarte correto.
+  3. O sistema deve aplicar e informar as regras de embalagem aceitas, como
+     xaropes apenas com caixa lacrada e comprimidos com alvéolos intactos.
+
+ID: [RS003]
+Perigo: Em caso de um evento adverso de saúde, a falta de um registro claro sobre
+a origem e o percurso do medicamento impossibilitaria a investigação e a
+responsabilização dos envolvidos.
+Soluções: Para garantir a responsabilização e a capacidade de auditoria, o sistema
+deve:
+  1. Exigir o cadastro completo de todos os usuários (doadores, receptores e
+     entidades) com identificadores únicos como CPF e CNPJ, para que nenhuma
+     operação seja anônima.
+  2. Manter um histórico detalhado e imutável (log) de todas as transações, criando
+     uma trilha de auditoria completa: quem doou, qual medicamento, para onde foi,
+     quem validou e quem recebeu.
+
+ID: [RS004]
+Perigo: Acesso não autorizado e violação de dados pessoais sensíveis (nome, CPF,
+histórico de medicamentos), violando a privacidade dos usuários e a Lei Geral de
+Proteção de Dados (LGPD).
+Soluções: Para proteger os dados dos usuários, o sistema deve:
+  1. Implementar um controle de acesso baseado em papéis (Doador, Receptor,
+     Farmacêutico), onde um usuário não pode acessar dados de outros.
+  2. Garantir o acesso ao sistema por meio de um processo de login e senha seguro.
+  3. Armazenar os dados seguindo as melhores práticas de segurança e criptografia
+     para estar em conformidade com a LGPD.
+
+Documento de Requisitos  Página 18 de 23
+
+================================================================================
+6. Matriz de Avaliação de Risco
+================================================================================
+
+Segurança/probabilidade | Catastrófico(1) | Crítico(2) | Marginal(3) | Insignificante(4)
+------------------------|-----------------|------------|-------------|------------------
+Frequente (A)           |                 |            |             |
+Provável  (B)           |                 | RS001,RS002|             |
+Ocasional (C)           |                 |            | RS003,RS004 |
+Remoto    (D)           |                 |            |             |
+Improvável(E)           |                 |            |             |
+Eliminado (F)           |                 |            |             |
+
+Documento de Requisitos  Página 19 de 23
+
+================================================================================
+7. Matriz de Rastreabilidade – Requisito Funcional
+================================================================================
+
+         RF001 RF002 RF003 RF004 RF005 RF006 RF007 RF008 RF009 RF010 RF011
+RF001      -     R     R     R     R     -     -     -     -     R     -
+RF002      -     -     -     R     -     D     -     R     -     D     D
+RF003      D     -     -     R     R     -     -     -     -     -     -
+RF004      R     D     -     -     D     D     R     -     D     -     -
+RF005      R     R     D     D     -     R     D     D     R     -     -
+RF006      D     D     D     D     D     -     R     D     R     D     -
+RF007      D     D     R     D     D     D     -     R     D     R     D
+RF008      D     -     -     -     R     R     D     -     R     -     -
+RF009      R     D     -     D     R     R     -     -     -     -     -
+RF010      D     D     R     D     R     R     R     -     -     -     -
+RF011      R     R     R     D     D     R     R     -     -     -     -
+
+Documento de Requisitos  Página 20 de 23
+
+================================================================================
+8. Ponto de função
+================================================================================
+
+Para que seja conhecido o tamanho funcional de um software, são realizadas
+medições da quantidade de funcionalidades que um software possui, ou seja,
+quantas funcionalidades ele é capaz de fornecer ao seu usuário.
+
+Desse modo, a Análise por Pontos de Função é um método que divide o aplicativo de
+software em partes menores, sendo realizada a contagem de funcionalidades em cada
+uma dessas partes, de modo a constatar qual o tamanho total do software analisado.
+
+4.1 Componentes Fundamentais
+
+Funções do tipo Dado: são aqueles relacionados ao armazenamento de dados, sendo
+o Arquivo Lógico Interno e o Arquivo Lógico Externo.
+
+Funções do tipo Transação: são aquelas realizadas a atividades de processamento
+realizadas pelo usuário, englobando a Entrada Externa, Saída Externa e a Consulta
+Externa.
+
+Arquivo Lógico Interno (ALI)
+O arquivo lógico interno corresponde a um grupo de dados de controle relacionados
+logicamente, reconhecidos pelos usuários, os quais são armazenados dentro da
+fronteira de aplicação. Em outras palavras, trata-se de dados mantidos em tabelas em
+um banco de dados.
+
+Arquivo de Interface Externa (AIE)
+O arquivo de interface externa é similar ao ALI, sendo também um grupo de dados de
+controle logicamente relacionados, porém, eles são armazenados do lado externo/fora
+da fronteira de aplicação, sendo ele mantido por outra aplicação. Desse modo, um
+arquivo de interface externa de uma aplicação sempre será um arquivo lógico interno
+de outra aplicação.
+
+Entrada Externa (EE)
+Uma entrada externa corresponde ao processamento de dados originados do lado de
+fora da fronteira de aplicação, ou seja, recebidos externamente. Essas entradas externas
+podem provocar ou não alterações no comportamento do sistema, através de exclusões,
+inclusões ou alterações em dados armazenados no ALI.
+
+Saída Externa (SE)
+A saída externa, por sua vez, é realizada quando há o envio de dados de dentro da
+fronteira de aplicação para o ambiente externo, sendo que ela sempre irá alterar o
+comportamento do sistema. Em outras palavras, a saída externa exibe ao usuário
+informações que são obtidas por meio de um processamento lógico de dados, através
+de cálculos e operações dos dados, não sendo apenas uma mera consulta.
+
+Consulta Externa (CE)
+Ela é similar à saída externa, porém, não há alteração do comportamento do sistema,
+não há nenhum cálculo ou alteração dos dados, sendo apenas realizada mera
+consulta/recuperação dos dados dentro da fronteira de aplicação.
+
+Documento de Requisitos  Página 21 de 23
+
+Determinar o tipo de contagem:
+Para esse projeto, utilizaremos a contagem para projeto em desenvolvimento, que
+mede a funcionalidade fornecida aos usuários finais do software quando da primeira
+instalação entregue quando o projeto estiver pronto.
+
+Determinar Escopo e Fronteira:
+O sistema realizará a contagem dos requisitos funcionais de todos os módulos que
+compõem o sistema, vale salientar que o sistema está limitado aos módulos internos
+e não integrações com sistemas externos.
+
+Calcular pontos de função não-ajustados:
+
+Tabela de Complexidade:
+
+Componente               | Baixa | Média | Alta
+-------------------------|-------|-------|-----
+Consulta Externa         |   3   |   4   |   6
+Entrada Externa          |   3   |   4   |   6
+Saída Externa            |   4   |   5   |   7
+Arquivo de Interface Ext |   5   |   7   |  10
+Arquivo Lógico Interno   |   7   |  10   |  15
+
+PONTO DE FUNÇÃO – SISTEMA GESTÃO
+
+REQUISITO FUNCIONAL | COMPLEXIDADE | ALI | AIE | SE | EE | CE | TOTAL
+--------------------|--------------|-----|-----|----|----|----| -----
+RF001               | ALTA         |  15 |  10 |  7 |  6 |  6 |  44
+RF002               | MÉDIA        |  10 |   7 |  5 |  4 |  4 |  30
+RF003               | BAIXA        |   7 |   0 |  4 |  0 |  3 |  14
+RF004               |              |     |     |    |    |    |
+RF005               |              |     |     |    |    |    |
+RF006               |              |     |     |    |    |    |
+RF007               |              |     |     |    |    |    |
+RF008               |              |     |     |    |    |    |
+RF009               |              |     |     |    |    |    |
+RF010               |              |     |     |    |    |    |
+RF011               |              |     |     |    |    |    |
+
+Documento de Requisitos  Página 22 de 23
+
+================================================================================
+9. Referências
+================================================================================
+
+1. Baseado no documento de requisitos disponível em:
+   http://demo.chiliproject.org/attachments/169/documentoRequisitos.doc
+
+Documento de Requisitos  Página 23 de 23

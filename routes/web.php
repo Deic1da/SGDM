@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\MedicamentoDoacaoController;
 
 Route::get('/', function () {
 
@@ -22,22 +23,27 @@ Route::middleware('auth')->group(function () {
     Route::get('/CadastroMedicamento', function () {
         return view('CadastroMedicamento');
     })->name('cadastro-medicamento');
+
+    Route::post('/CadastroMedicamento', [MedicamentoDoacaoController::class, 'store'])
+        ->name('cadastro-medicamento.store');
     
     Route::get('/Descarte', function () {
         return view('Descarte');
     })->name('descarte');
-    
-    Route::get('/ValidarDoacao', function () {
-        return view('ValidarDoacao');
-    })->name('validar-doacao');
+
+    Route::middleware('farmaceutico.ativo')->group(function () {
+        Route::get('/ValidarDoacao', function () {
+            return view('ValidarDoacao');
+        })->name('validar-doacao');
+
+        Route::get('/EstoqueMedicamento', function () {
+            return view('EstoqueMedicamento');
+        })->name('estoque-medicamento');
+    });
     
     Route::get('/PaginaInicial', function () {
         return view('PaginaInicial');
     })->name('pagina-inicial');
-
-    Route::get('/EstoqueMedicamento', function () {
-        return view('EstoqueMedicamento');
-    })->name('estoque-medicamento');
 
 });
 
