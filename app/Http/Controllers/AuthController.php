@@ -10,6 +10,14 @@ use App\Models\User;
 class AuthController extends Controller
 {
 
+    public function showLoginForm()
+    {
+        if (Auth::check()) {
+            return redirect('/PaginaInicial');
+        }
+        return view('login');
+    }
+
     public function register(RegisterUserRequest $request)
     {
         $dados = $request->validated();
@@ -85,6 +93,16 @@ class AuthController extends Controller
         return back()->withErrors([
             'email' => 'Credenciais inválidas',
         ]);
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/');
     }
 
 

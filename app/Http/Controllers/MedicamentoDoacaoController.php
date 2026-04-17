@@ -8,6 +8,8 @@ use Carbon\Carbon;
 
 class MedicamentoDoacaoController extends Controller
 {
+
+
     public function store(StoreMedicamentoDoacaoRequest $request)
     {
         $dados = $request->validated();

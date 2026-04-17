@@ -88,6 +88,25 @@ body {
 	letter-spacing: 0.08em;
 }
 
+.alerta {
+	padding: 10px 12px;
+	border-radius: 10px;
+	font-size: 13px;
+	font-weight: 600;
+}
+
+.alerta.erro {
+	border: 1px solid #f2c4c4;
+	background: #fff0f0;
+	color: #8e1f1f;
+}
+
+.alerta.sucesso {
+	border: 1px solid #bde6ce;
+	background: #eefcf4;
+	color: #1f6d3d;
+}
+
 label {
 	font-size: 12px;
 	text-transform: uppercase;
@@ -111,6 +130,25 @@ select:focus {
 	outline: none;
 	border-color: var(--primary);
 	box-shadow: 0 0 0 3px rgba(119, 61, 190, 0.14);
+}
+
+.checkboxCampo {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	font-size: 12px;
+	text-transform: none;
+	letter-spacing: 0;
+	font-weight: 600;
+	margin-top: 4px;
+}
+
+.checkboxCampo input[type="checkbox"] {
+	width: 16px;
+	height: 16px;
+	margin: 0;
+	padding: 0;
+	accent-color: var(--primary);
 }
 
 .finalizar {

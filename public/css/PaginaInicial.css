@@ -54,9 +54,14 @@ body {
 }
 
 .topActions {
+    position: relative;
     display: flex;
     gap: 12px;
     align-items: center;
+}
+
+.is-hidden {
+    display: none;
 }
 
 .card {
@@ -229,6 +234,34 @@ button.cinza:hover {
     width: 54px;
     height: 54px;
     font-size: 1rem;
+}
+
+.perfilMenu {
+    position: absolute;
+    top: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 220px;
+    padding: 8px;
+    border-radius: 14px;
+    z-index: 20;
+}
+
+.perfilMenuItem {
+    width: 100%;
+    text-align: left;
+    padding: 11px 12px;
+    border-radius: 10px;
+    background: #ffffff;
+    color: var(--ink);
+    font-weight: 600;
+    border: 1px solid transparent;
+    transition: background-color 180ms ease, border-color 180ms ease;
+}
+
+.perfilMenuItem:hover {
+    background: #f3eaff;
+    border-color: #e2d1f8;
 }
 
 @media (max-width: 1080px) {

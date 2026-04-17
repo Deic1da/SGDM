@@ -38,78 +38,36 @@
                     </tr>
                 </thead>
                 <tbody>
+                @forelse ($itens as $item)
+                @php
+                    $statusClasse = match ($item->status_estoque) {
+                        'Disponivel' => 'disponivel',
+                        'Reservado' => 'reservado',
+                        'Entregue' => 'entregue',
+                        'Descartado' => 'descartado',
+                        default => 'disponivel',
+                    };
 
-                <tr class="destaque">
-                    <td>Dipirona</td>
-                    <td>Comprimido</td>
-                    <td>120</td>
-                    <td>17/02/2026</td>
-                    <td><span class="status disponivel">Disponível</span></td>
+                    $statusTexto = match ($item->status_estoque) {
+                        'Disponivel' => 'Disponível',
+                        'Reservado' => 'Reservado',
+                        'Entregue' => 'Entregue',
+                        'Descartado' => 'Descartado',
+                        default => $item->status_estoque,
+                    };
+                @endphp
+                <tr class="{{ $loop->first ? 'destaque' : '' }}">
+                    <td>{{ $item->nome_medicamento }}</td>
+                    <td>{{ $item->forma_farmaceutica }}</td>
+                    <td>{{ $item->quantidade }}</td>
+                    <td>{{ \Carbon\Carbon::parse($item->data_validade)->format('d/m/Y') }}</td>
+                    <td><span class="status {{ $statusClasse }}">{{ $statusTexto }}</span></td>
                 </tr>
-
+                @empty
                 <tr>
-                    <td>Paracetamol</td>
-                    <td>Comprimido</td>
-                    <td>85</td>
-                    <td>15/03/2026</td>
-                    <td><span class="status disponivel">Disponível</span></td>
+                    <td colspan="5">Nenhum medicamento encontrado para a entidade vinculada.</td>
                 </tr>
-
-                <tr>
-                    <td>Ibuprofeno</td>
-                    <td>Cápsula</td>
-                    <td>40</td>
-                    <td>01/01/2027</td>
-                    <td><span class="status reservado">Reservado</span></td>
-                </tr>
-
-                <tr>
-                    <td>Amoxicilina</td>
-                    <td>Suspensão</td>
-                    <td>12</td>
-                    <td>30/09/2025</td>
-                    <td><span class="status descartado">Descartado</span></td>
-                </tr>
-
-                <tr>
-                    <td>Losartana</td>
-                    <td>Comprimido</td>
-                    <td>200</td>
-                    <td>18/07/2026</td>
-                    <td><span class="status disponivel">Disponível</span></td>
-                </tr>
-
-                <tr>
-                    <td>Omeprazol</td>
-                    <td>Cápsula</td>
-                    <td>63</td>
-                    <td>02/05/2026</td>
-                    <td><span class="status reservado">Reservado</span></td>
-                </tr>
-
-                <tr>
-                    <td>Insulina</td>
-                    <td>Injetável</td>
-                    <td>25</td>
-                    <td>25/12/2025</td>
-                    <td><span class="status entregue">Entregue</span></td>
-                </tr>
-
-                <tr>
-                    <td>Metformina</td>
-                    <td>Comprimido</td>
-                    <td>150</td>
-                    <td>11/08/2026</td>
-                    <td><span class="status disponivel">Disponível</span></td>
-                </tr>
-
-                <tr>
-                    <td>AAS</td>
-                    <td>Comprimido</td>
-                    <td>90</td>
-                    <td>14/12/2026</td>
-                    <td><span class="status disponivel">Disponível</span></td>
-                </tr>
+                @endforelse
 
                 </tbody>
 
@@ -131,14 +89,22 @@
     </div>
 
     <div class="paginacao">
-        <span class="seta">&lt;</span>
-        <span class="pagina ativa">1</span>
-        <span class="pagina">2</span>
-        <span class="pagina">3</span>
-        <span class="pagina">4</span>
-        <span class="pontos">...</span>
-        <span class="pagina">40</span>
-        <span class="seta">&gt;</span>
+        @if ($itens->hasPages())
+            @if ($itens->onFirstPage())
+                <span class="seta">&lt;</span>
+            @else
+                <a class="seta" href="{{ $itens->previousPageUrl() }}">&lt;</a>
+            @endif
+
+            <span class="pagina ativa">{{ $itens->currentPage() }}</span>
+            <span class="pontos">de {{ $itens->lastPage() }}</span>
+
+            @if ($itens->hasMorePages())
+                <a class="seta" href="{{ $itens->nextPageUrl() }}">&gt;</a>
+            @else
+                <span class="seta">&gt;</span>
+            @endif
+        @endif
     </div>
 
 </div>

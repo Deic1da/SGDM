@@ -14,9 +14,18 @@
         <div class="brandBlock">
             <h1 class="Logo">SGDM</h1>
         </div>
-        <div class="topActions">
-            <button class="btnConfig">&#9881;</button>
-            <button class="btnPerfil">&#128100;</button>
+        <div class="topActions" id="perfilMenuContainer">
+            <button class="btnConfig is-hidden" aria-hidden="true" tabindex="-1">&#9881;</button>
+            <button class="btnPerfil" id="btnPerfil" aria-expanded="false" aria-controls="perfilMenu">&#128100;</button>
+            <div class="perfilMenu card" id="perfilMenu" hidden>
+                <button type="button" class="perfilMenuItem" onclick="window.location.href='{{ route('cadastro-farmaceutico') }}'">Cadastro de Farmacêutico</button>
+                <button type="button" class="perfilMenuItem" onclick="window.location.href='{{ route('cadastro-ponto-coleta') }}'">Cadastrar ponto de coleta</button>
+                <button type="button" class="perfilMenuItem" aria-label="Trocar foto do perfil">Trocar foto do perfil</button>
+                <form method="POST" action="{{ url('/logout') }}">
+                    @csrf
+                    <button type="submit" class="perfilMenuItem">Sair</button>
+                </form>
+            </div>
         </div>
     </header>
 
@@ -26,9 +35,8 @@
                 <button class="roxo" onclick="window.location.href='{{ route('cadastro-medicamento') }}'">Doar Medicamento</button>
             </div>
             <div class="navDireita">
-                <button class="cinza" onclick="window.location.href='{{ route('cadastro-farmaceutico') }}'">Área do Farmacêutico</button>
-                <button class="cinza" onclick="window.location.href='{{ route('estoque-medicamento') }}'">Gerenciar Ponto de Coleta</button>
-                <button class="cinza" onclick="window.location.href='{{ route('validar-doacao') }}'">Validar Doação</button>
+                <button class="{{ $temAcessoFarmaceutico ? 'roxo' : 'cinza' }}" onclick="window.location.href='{{ route('estoque-medicamento') }}'">Gerenciar Remédios</button>
+                <button class="{{ $temAcessoFarmaceutico ? 'roxo' : 'cinza' }}" onclick="window.location.href='{{ route('validar-doacao') }}'">Validar Doação</button>
             </div>
     </nav>
 
@@ -95,6 +103,9 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const pontos = document.querySelectorAll('.listaPontosItens .PontoColeta');
+            const btnPerfil = document.getElementById('btnPerfil');
+            const perfilMenu = document.getElementById('perfilMenu');
+            const perfilMenuContainer = document.getElementById('perfilMenuContainer');
 
             pontos.forEach(function (ponto) {
                 ponto.addEventListener('click', function () {
@@ -105,6 +116,35 @@
                     ponto.classList.add('ativo');
                 });
             });
+
+            if (btnPerfil && perfilMenu && perfilMenuContainer) {
+                btnPerfil.addEventListener('click', function () {
+                    const isOpen = !perfilMenu.hasAttribute('hidden');
+
+                    if (isOpen) {
+                        perfilMenu.setAttribute('hidden', 'hidden');
+                        btnPerfil.setAttribute('aria-expanded', 'false');
+                        return;
+                    }
+
+                    perfilMenu.removeAttribute('hidden');
+                    btnPerfil.setAttribute('aria-expanded', 'true');
+                });
+
+                document.addEventListener('click', function (event) {
+                    if (!perfilMenuContainer.contains(event.target)) {
+                        perfilMenu.setAttribute('hidden', 'hidden');
+                        btnPerfil.setAttribute('aria-expanded', 'false');
+                    }
+                });
+
+                document.addEventListener('keydown', function (event) {
+                    if (event.key === 'Escape') {
+                        perfilMenu.setAttribute('hidden', 'hidden');
+                        btnPerfil.setAttribute('aria-expanded', 'false');
+                    }
+                });
+            }
         });
     </script>
 </body>

@@ -32,6 +32,7 @@ class User extends Authenticatable
         'bairro',
         'municipio',
         'estado',
+        'foto_perfil',
     ];
 
     /**
