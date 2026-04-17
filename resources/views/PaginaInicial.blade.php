@@ -10,17 +10,46 @@
     <link href="{{ asset('css/PaginaInicial.css') }}" rel="stylesheet">
 </head>
 <body>
+    @php
+        $fotoPerfil = auth()->user()?->foto_perfil;
+        $urlFotoPerfil = null;
+
+        if (!empty($fotoPerfil)) {
+            $urlFotoPerfil = str_starts_with($fotoPerfil, 'http')
+                ? $fotoPerfil
+                : asset('storage/' . $fotoPerfil);
+        }
+    @endphp
+
+    @if (session('success'))
+    <div class="flash sucesso">{{ session('success') }}</div>
+    @endif
+
+    @if ($errors->has('foto_perfil'))
+    <div class="flash erro">{{ $errors->first('foto_perfil') }}</div>
+    @endif
+
     <header class="topbar">
         <div class="brandBlock">
             <h1 class="Logo">SGDM</h1>
         </div>
         <div class="topActions" id="perfilMenuContainer">
             <button class="btnConfig is-hidden" aria-hidden="true" tabindex="-1">&#9881;</button>
-            <button class="btnPerfil" id="btnPerfil" aria-expanded="false" aria-controls="perfilMenu">&#128100;</button>
+            <button class="btnPerfil" id="btnPerfil" aria-expanded="false" aria-controls="perfilMenu">
+                @if ($urlFotoPerfil)
+                    <img class="perfilAvatar" src="{{ $urlFotoPerfil }}" alt="Foto do perfil">
+                @else
+                    &#128100;
+                @endif
+            </button>
             <div class="perfilMenu card" id="perfilMenu" hidden>
                 <button type="button" class="perfilMenuItem" onclick="window.location.href='{{ route('cadastro-farmaceutico') }}'">Cadastro de Farmacêutico</button>
                 <button type="button" class="perfilMenuItem" onclick="window.location.href='{{ route('cadastro-ponto-coleta') }}'">Cadastrar ponto de coleta</button>
-                <button type="button" class="perfilMenuItem" aria-label="Trocar foto do perfil">Trocar foto do perfil</button>
+                <form method="POST" action="{{ route('perfil-foto.update') }}" enctype="multipart/form-data" id="formFotoPerfil">
+                    @csrf
+                    <input type="file" name="foto_perfil" id="inputFotoPerfil" accept="image/*" hidden>
+                    <button type="button" class="perfilMenuItem" id="btnTrocarFoto" aria-label="Trocar foto do perfil">Trocar foto do perfil</button>
+                </form>
                 <form method="POST" action="{{ url('/logout') }}">
                     @csrf
                     <button type="submit" class="perfilMenuItem">Sair</button>
@@ -106,6 +135,9 @@
             const btnPerfil = document.getElementById('btnPerfil');
             const perfilMenu = document.getElementById('perfilMenu');
             const perfilMenuContainer = document.getElementById('perfilMenuContainer');
+            const btnTrocarFoto = document.getElementById('btnTrocarFoto');
+            const inputFotoPerfil = document.getElementById('inputFotoPerfil');
+            const formFotoPerfil = document.getElementById('formFotoPerfil');
 
             pontos.forEach(function (ponto) {
                 ponto.addEventListener('click', function () {
@@ -142,6 +174,18 @@
                     if (event.key === 'Escape') {
                         perfilMenu.setAttribute('hidden', 'hidden');
                         btnPerfil.setAttribute('aria-expanded', 'false');
+                    }
+                });
+            }
+
+            if (btnTrocarFoto && inputFotoPerfil && formFotoPerfil) {
+                btnTrocarFoto.addEventListener('click', function () {
+                    inputFotoPerfil.click();
+                });
+
+                inputFotoPerfil.addEventListener('change', function () {
+                    if (inputFotoPerfil.files && inputFotoPerfil.files.length > 0) {
+                        formFotoPerfil.submit();
                     }
                 });
             }

@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EntidadeController;
 use App\Http\Controllers\EstoqueController;
 use App\Http\Controllers\MedicamentoDoacaoController;
+use App\Http\Controllers\PerfilController;
 
 // Rotas publicas
 Route::get('/', [AuthController::class, 'showLoginForm'])->name('login');
@@ -41,6 +42,9 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/CadastroMedicamento', [MedicamentoDoacaoController::class, 'store'])
         ->name('cadastro-medicamento.store');
+
+    Route::post('/Perfil/Foto', [PerfilController::class, 'atualizarFoto'])
+        ->name('perfil-foto.update');
 
     // Fluxo restrito a farmaceutico ativo
     Route::middleware('farmaceutico.ativo')->group(function () {
