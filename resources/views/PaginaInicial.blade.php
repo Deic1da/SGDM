@@ -70,7 +70,9 @@
     </nav>
 
     <main class="dashboard">
-        <section class="Mapa card"></section>
+        <section class="Mapa card">
+            <x-mapa-ponto-coleta />
+        </section>
 
         <aside class="listaPontos card">
             <h2>Pontos de Coleta Próximos</h2>

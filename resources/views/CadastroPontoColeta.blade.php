@@ -70,6 +70,8 @@
     <span>Aceita medicamentos com validade curta (7 dias)</span>
 </label>
 
+<x-mapa-ponto-coleta />
+
 <label for="status-exibicao">Status inicial</label>
 <input id="status-exibicao" type="text" value="Aprovado" readonly>
 
