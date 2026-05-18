@@ -3,8 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class StoreEntidadeRequest extends FormRequest
+class UpdateEntidadeRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -13,10 +14,17 @@ class StoreEntidadeRequest extends FormRequest
 
     public function rules(): array
     {
+        $entidade = $this->route('entidade');
+
         return [
             'razao_social' => ['required', 'string', 'max:255'],
             'nome_fantasia' => ['nullable', 'string', 'max:255'],
-            'cnpj' => ['required', 'string', 'size:14', 'unique:entidades,cnpj'],
+            'cnpj' => [
+                'required',
+                'string',
+                'size:14',
+                Rule::unique('entidades', 'cnpj')->ignore($entidade?->id),
+            ],
             'horario_funcionamento' => ['required', 'string', 'max:100'],
             'aceita_validade_curta' => ['nullable', 'boolean'],
             'cep' => ['required', 'string', 'size:8'],

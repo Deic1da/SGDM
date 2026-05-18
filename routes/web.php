@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EntidadeController;
 use App\Http\Controllers\EstoqueController;
+use App\Http\Controllers\FarmaceuticoController;
 use App\Http\Controllers\MedicamentoDoacaoController;
 use App\Http\Controllers\PerfilController;
 
@@ -29,6 +30,8 @@ Route::middleware('auth')->group(function () {
     // Cadastro de farmaceutico
     Route::get('/CadastroFarmaceutico', [PaginasController::class, 'cadastroFarmaceutico'])
         ->name('cadastro-farmaceutico');
+    Route::post('/CadastroFarmaceutico', [FarmaceuticoController::class, 'store'])
+        ->name('cadastro-farmaceutico.store');
 
     // Cadastro de medicamento para doacao
     Route::get('/CadastroMedicamento', [PaginasController::class, 'cadastroMedicamento'])
@@ -39,6 +42,16 @@ Route::middleware('auth')->group(function () {
         ->name('cadastro-ponto-coleta');
     Route::post('/CadastroPontoColeta', [EntidadeController::class, 'store'])
         ->name('cadastro-ponto-coleta.store');
+    Route::get('/PontosColeta', [EntidadeController::class, 'index'])
+        ->name('pontos-coleta.index');
+    Route::get('/PontosColeta/{entidade}/editar', [EntidadeController::class, 'edit'])
+        ->name('pontos-coleta.edit');
+    Route::put('/PontosColeta/{entidade}', [EntidadeController::class, 'update'])
+        ->name('pontos-coleta.update');
+    Route::patch('/PontosColeta/{entidade}/reativar', [EntidadeController::class, 'reativar'])
+        ->name('pontos-coleta.reativar');
+    Route::delete('/PontosColeta/{entidade}', [EntidadeController::class, 'destroy'])
+        ->name('pontos-coleta.destroy');
 
     Route::post('/CadastroMedicamento', [MedicamentoDoacaoController::class, 'store'])
         ->name('cadastro-medicamento.store');
@@ -48,10 +61,10 @@ Route::middleware('auth')->group(function () {
 
     // Fluxo restrito a farmaceutico ativo
     Route::middleware('farmaceutico.ativo')->group(function () {
-        Route::get('/ValidarDoacao', [PaginasController::class, 'validarDoacao'])
+        Route::get('/Entidades/{entidade}/ValidarDoacao', [PaginasController::class, 'validarDoacao'])
             ->name('validar-doacao');
 
-        Route::get('/EstoqueMedicamento', [EstoqueController::class, 'index'])
+        Route::get('/Entidades/{entidade}/Estoque', [EstoqueController::class, 'index'])
             ->name('estoque-medicamento');
     });
 });

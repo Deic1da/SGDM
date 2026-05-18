@@ -21,6 +21,7 @@
 
     <div class="topoSecao">
         <h2>Estoque de Medicamentos</h2>
+        <span>{{ $entidade->nome_fantasia ?: $entidade->razao_social }}</span>
         <input class="pesquisa" type="text" placeholder="Pesquisar Medicamento" aria-label="Pesquisar medicamento">
     </div>
 

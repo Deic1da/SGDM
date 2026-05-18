@@ -81,6 +81,10 @@ body {
     align-items: center;
 }
 
+.estoqueMenuContainer {
+    position: relative;
+}
+
 .is-hidden {
     display: none;
 }
@@ -291,6 +295,17 @@ button.cinza:hover {
     z-index: 20;
 }
 
+.estoqueMenu {
+    position: absolute;
+    top: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 240px;
+    padding: 8px;
+    border-radius: 14px;
+    z-index: 20;
+}
+
 .perfilMenuItem {
     width: 100%;
     text-align: left;
@@ -306,6 +321,11 @@ button.cinza:hover {
 .perfilMenuItem:hover {
     background: #f3eaff;
     border-color: #e2d1f8;
+}
+
+.perfilMenuItem:disabled {
+    color: rgba(0, 0, 0, 0.45);
+    cursor: not-allowed;
 }
 
 @media (max-width: 1080px) {

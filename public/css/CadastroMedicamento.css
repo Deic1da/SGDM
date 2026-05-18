@@ -97,6 +97,62 @@ h1 {
 	padding-left: 18px;
 }
 
+.tabelaCrud {
+	width: min(980px, 100%);
+	margin: 0 auto;
+	overflow-x: auto;
+}
+
+.tabelaCrud table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 13px;
+}
+
+.tabelaCrud th,
+.tabelaCrud td {
+	padding: 12px;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+	text-align: left;
+}
+
+.tabelaCrud th {
+	font-size: 12px;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+}
+
+.statusBadge {
+	display: inline-flex;
+	align-items: center;
+	min-height: 28px;
+	padding: 4px 10px;
+	border-radius: 999px;
+	background: #f3eaff;
+	color: var(--primary);
+	font-weight: 700;
+}
+
+.acoesLinha {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	flex-wrap: wrap;
+}
+
+.acoesLinha a,
+.acoesLinha button {
+	border: 0;
+	background: transparent;
+	color: var(--primary);
+	font-family: "Manrope", sans-serif;
+	font-size: 13px;
+	font-weight: 700;
+	text-decoration: none;
+	cursor: pointer;
+	padding: 0;
+}
+
 .campoErro {
 	display: block;
 	margin-top: 4px;
@@ -115,6 +171,10 @@ h1 {
 
 .cadastro-ponto-coleta .grid {
 	grid-template-columns: 1.1fr 1fr 1.4fr;
+}
+
+.grid-edicao {
+	grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 label {
@@ -289,6 +349,24 @@ select:focus {
 	letter-spacing: 0.08em;
 }
 
+.mapaBusca {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) auto;
+	gap: 8px;
+}
+
+.mapaBusca button {
+	height: 44px;
+	padding: 0 14px;
+	border: none;
+	border-radius: 10px;
+	background: var(--primary);
+	color: #ffffff;
+	font-family: "Manrope", sans-serif;
+	font-weight: 700;
+	cursor: pointer;
+}
+
 .ponto {
 	border: 1px solid var(--line);
 	padding: 10px;
@@ -345,6 +423,10 @@ select:focus {
 		grid-template-columns: 1fr;
 	}
 
+	.grid-edicao {
+		grid-template-columns: 1fr;
+	}
+
 	.pontos-coleta {
 		border-left: none;
 		border-top: 1px solid rgba(0, 0, 0, 0.12);
@@ -369,6 +451,10 @@ select:focus {
 	}
 
 	.tipo {
+		grid-template-columns: 1fr;
+	}
+
+	.mapaBusca {
 		grid-template-columns: 1fr;
 	}
 

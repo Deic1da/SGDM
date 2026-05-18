@@ -20,6 +20,7 @@
 <main class="paginaValidacao">
 
 <h1 class="titulo">Validar Doação</h1>
+<p class="subtituloEntidade">{{ $entidade->nome_fantasia ?: $entidade->razao_social }}</p>
 
 <div class="busca">
 <input type="text" placeholder="Pesquisar Nº da Doação" aria-label="Pesquisar numero da doacao">

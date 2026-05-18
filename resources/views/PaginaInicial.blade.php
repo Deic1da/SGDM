@@ -45,6 +45,7 @@
             <div class="perfilMenu card" id="perfilMenu" hidden>
                 <button type="button" class="perfilMenuItem" onclick="window.location.href='{{ route('cadastro-farmaceutico') }}'">Cadastro de Farmacêutico</button>
                 <button type="button" class="perfilMenuItem" onclick="window.location.href='{{ route('cadastro-ponto-coleta') }}'">Cadastrar ponto de coleta</button>
+                <button type="button" class="perfilMenuItem" onclick="window.location.href='{{ route('pontos-coleta.index') }}'">Meus pontos de coleta</button>
                 <form method="POST" action="{{ route('perfil-foto.update') }}" enctype="multipart/form-data" id="formFotoPerfil">
                     @csrf
                     <input type="file" name="foto_perfil" id="inputFotoPerfil" accept="image/*" hidden>
@@ -64,14 +65,36 @@
                 <button class="roxo" onclick="window.location.href='{{ route('cadastro-medicamento') }}'">Doar Medicamento</button>
             </div>
             <div class="navDireita">
-                <button class="{{ $temAcessoFarmaceutico ? 'roxo' : 'cinza' }}" onclick="window.location.href='{{ route('estoque-medicamento') }}'">Gerenciar Remédios</button>
-                <button class="{{ $temAcessoFarmaceutico ? 'roxo' : 'cinza' }}" onclick="window.location.href='{{ route('validar-doacao') }}'">Validar Doação</button>
+                <div class="estoqueMenuContainer" id="estoqueMenuContainer">
+                    <button type="button" class="{{ $temAcessoFarmaceutico && $entidadesGerenciaveis->isNotEmpty() ? 'roxo' : 'cinza' }}" id="btnEstoque" aria-expanded="false" aria-controls="estoqueMenu" @disabled(!$temAcessoFarmaceutico || $entidadesGerenciaveis->isEmpty())>Gerenciar Remédios</button>
+                    <div class="estoqueMenu card" id="estoqueMenu" hidden>
+                        @forelse ($entidadesGerenciaveis as $entidadeGerenciavel)
+                            <button type="button" class="perfilMenuItem" onclick="window.location.href='{{ route('estoque-medicamento', $entidadeGerenciavel->id) }}'">
+                                {{ $entidadeGerenciavel->nome_fantasia ?: $entidadeGerenciavel->razao_social }}
+                            </button>
+                        @empty
+                            <button type="button" class="perfilMenuItem" disabled>Nenhum ponto vinculado</button>
+                        @endforelse
+                    </div>
+                </div>
+                <div class="estoqueMenuContainer" id="validacaoMenuContainer">
+                    <button type="button" class="{{ $temAcessoFarmaceutico && $entidadesGerenciaveis->isNotEmpty() ? 'roxo' : 'cinza' }}" id="btnValidacao" aria-expanded="false" aria-controls="validacaoMenu" @disabled(!$temAcessoFarmaceutico || $entidadesGerenciaveis->isEmpty())>Validar Doação</button>
+                    <div class="estoqueMenu card" id="validacaoMenu" hidden>
+                        @forelse ($entidadesGerenciaveis as $entidadeGerenciavel)
+                            <button type="button" class="perfilMenuItem" onclick="window.location.href='{{ route('validar-doacao', $entidadeGerenciavel->id) }}'">
+                                {{ $entidadeGerenciavel->nome_fantasia ?: $entidadeGerenciavel->razao_social }}
+                            </button>
+                        @empty
+                            <button type="button" class="perfilMenuItem" disabled>Nenhum ponto vinculado</button>
+                        @endforelse
+                    </div>
+                </div>
             </div>
     </nav>
 
     <main class="dashboard">
         <section class="Mapa card">
-            <x-mapa-ponto-coleta />
+            <x-mapa-ponto-coleta :mostrar-busca="false" />
         </section>
 
         <aside class="listaPontos card">
@@ -140,6 +163,12 @@
             const btnTrocarFoto = document.getElementById('btnTrocarFoto');
             const inputFotoPerfil = document.getElementById('inputFotoPerfil');
             const formFotoPerfil = document.getElementById('formFotoPerfil');
+            const btnEstoque = document.getElementById('btnEstoque');
+            const estoqueMenu = document.getElementById('estoqueMenu');
+            const estoqueMenuContainer = document.getElementById('estoqueMenuContainer');
+            const btnValidacao = document.getElementById('btnValidacao');
+            const validacaoMenu = document.getElementById('validacaoMenu');
+            const validacaoMenuContainer = document.getElementById('validacaoMenuContainer');
 
             pontos.forEach(function (ponto) {
                 ponto.addEventListener('click', function () {
@@ -176,6 +205,64 @@
                     if (event.key === 'Escape') {
                         perfilMenu.setAttribute('hidden', 'hidden');
                         btnPerfil.setAttribute('aria-expanded', 'false');
+                    }
+                });
+            }
+
+            if (btnEstoque && estoqueMenu && estoqueMenuContainer) {
+                btnEstoque.addEventListener('click', function () {
+                    const isOpen = !estoqueMenu.hasAttribute('hidden');
+
+                    if (isOpen) {
+                        estoqueMenu.setAttribute('hidden', 'hidden');
+                        btnEstoque.setAttribute('aria-expanded', 'false');
+                        return;
+                    }
+
+                    estoqueMenu.removeAttribute('hidden');
+                    btnEstoque.setAttribute('aria-expanded', 'true');
+                });
+
+                document.addEventListener('click', function (event) {
+                    if (!estoqueMenuContainer.contains(event.target)) {
+                        estoqueMenu.setAttribute('hidden', 'hidden');
+                        btnEstoque.setAttribute('aria-expanded', 'false');
+                    }
+                });
+
+                document.addEventListener('keydown', function (event) {
+                    if (event.key === 'Escape') {
+                        estoqueMenu.setAttribute('hidden', 'hidden');
+                        btnEstoque.setAttribute('aria-expanded', 'false');
+                    }
+                });
+            }
+
+            if (btnValidacao && validacaoMenu && validacaoMenuContainer) {
+                btnValidacao.addEventListener('click', function () {
+                    const isOpen = !validacaoMenu.hasAttribute('hidden');
+
+                    if (isOpen) {
+                        validacaoMenu.setAttribute('hidden', 'hidden');
+                        btnValidacao.setAttribute('aria-expanded', 'false');
+                        return;
+                    }
+
+                    validacaoMenu.removeAttribute('hidden');
+                    btnValidacao.setAttribute('aria-expanded', 'true');
+                });
+
+                document.addEventListener('click', function (event) {
+                    if (!validacaoMenuContainer.contains(event.target)) {
+                        validacaoMenu.setAttribute('hidden', 'hidden');
+                        btnValidacao.setAttribute('aria-expanded', 'false');
+                    }
+                });
+
+                document.addEventListener('keydown', function (event) {
+                    if (event.key === 'Escape') {
+                        validacaoMenu.setAttribute('hidden', 'hidden');
+                        btnValidacao.setAttribute('aria-expanded', 'false');
                     }
                 });
             }
