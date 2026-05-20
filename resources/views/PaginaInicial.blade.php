@@ -61,7 +61,24 @@
 
     <nav class="actionBar">
             <div class="navEsquerda">
-                <input type="text" placeholder="Pesquisar Medicamento" aria-label="Pesquisar medicamento">
+                <form class="formPesquisaMedicamento" id="formPesquisaMedicamento" method="GET" action="{{ route('pagina-inicial') }}" autocomplete="off">
+                    <div class="pesquisaAutocomplete">
+                        <input
+                            type="text"
+                            name="medicamento"
+                            id="inputPesquisaMedicamento"
+                            value="{{ $termoMedicamento }}"
+                            placeholder="Pesquisar Medicamento"
+                            aria-label="Pesquisar medicamento"
+                            aria-controls="sugestoesMedicamentos"
+                            aria-expanded="false"
+                            data-sugestoes-url="{{ route('medicamentos.sugestoes') }}"
+                            autocomplete="off"
+                        >
+                        <div class="sugestoesMedicamentos" id="sugestoesMedicamentos" role="listbox" hidden></div>
+                    </div>
+                    <button class="roxo" type="submit">Pesquisar</button>
+                </form>
                 <button class="roxo" onclick="window.location.href='{{ route('cadastro-medicamento') }}'">Doar Medicamento</button>
             </div>
             <div class="navDireita">
@@ -94,61 +111,49 @@
 
     <main class="dashboard">
         <section class="Mapa card">
-            <x-mapa-ponto-coleta :mostrar-busca="false" />
+            <x-mapa-ponto-coleta :mostrar-busca="false" :pontos="$pontosColeta" />
         </section>
 
         <aside class="listaPontos card">
-            <h2>Pontos de Coleta Próximos</h2>
+            <h2>{{ $termoMedicamento !== '' ? 'Pontos com medicamento' : 'Pontos de Coleta Próximos' }}</h2>
+            @if ($termoMedicamento !== '')
+                <p class="resultadoBusca">Resultado para "{{ $termoMedicamento }}"</p>
+            @endif
             <div class="listaPontosItens">
 
-                <div class="PontoColeta ativo">
-                    <p>Ponto de Coleta</p>
-                    <span>3Km</span>
-                </div>
-                <div class="PontoColeta">
-                    <p>Ponto de Coleta</p>
-                    <span>3Km</span>
-                </div>
-                <div class="PontoColeta">
-                    <p>Ponto de Coleta</p>
-                    <span>3Km</span>
-                </div>
-                <div class="PontoColeta">
-                    <p>Ponto de Coleta</p>
-                    <span>3Km</span>
-                </div>
-                <div class="PontoColeta">
-                    <p>Ponto de Coleta</p>
-                    <span>3Km</span>
-                </div>
-                <div class="PontoColeta">
-                    <p>Ponto de Coleta</p>
-                    <span>3Km</span>
-                </div>
-                <div class="PontoColeta">
-                    <p>Ponto de Coleta</p>
-                    <span>3Km</span>
-                </div>
-                <div class="PontoColeta">
-                    <p>Ponto de Coleta</p>
-                    <span>3Km</span>
-                </div>
-                <div class="PontoColeta">
-                    <p>Ponto de Coleta</p>
-                    <span>3Km</span>
-                </div>
-                <div class="PontoColeta">
-                    <p>Ponto de Coleta</p>
-                    <span>3Km</span>
-                </div>
-                <div class="PontoColeta">
-                    <p>Ponto de Coleta</p>
-                    <span>3Km</span>
-                </div>
-                <div class="PontoColeta">
-                    <p>Ponto de Coleta</p>
-                    <span>3Km</span>
-                </div>
+                @forelse ($pontosColeta as $pontoColeta)
+                    @php
+                        $nomePonto = $pontoColeta->nome_fantasia ?: $pontoColeta->razao_social;
+                        $enderecoPonto = collect([
+                            $pontoColeta->logradouro,
+                            $pontoColeta->numero,
+                            $pontoColeta->bairro,
+                            $pontoColeta->municipio,
+                            $pontoColeta->estado,
+                        ])->filter()->implode(', ');
+                    @endphp
+                    <div class="PontoColeta {{ $loop->first ? 'ativo' : '' }}" data-latitude="{{ $pontoColeta->latitude }}" data-longitude="{{ $pontoColeta->longitude }}">
+                        <div class="pontoInfo">
+                            <p>{{ $nomePonto }}</p>
+                            <small>{{ $enderecoPonto ?: 'Endereco nao informado' }}</small>
+                            <small>{{ $pontoColeta->horario_funcionamento ?: 'Horario nao informado' }}</small>
+                            @if ($termoMedicamento !== '' && isset($pontoColeta->medicamento_encontrado))
+                                <small class="medicamentoDisponivel">
+                                    {{ $pontoColeta->medicamento_encontrado }} - {{ $pontoColeta->quantidade_disponivel }} disponivel(is)
+                                </small>
+                            @endif
+                            <a class="abrirMaps" href="https://www.google.com/maps/dir/?api=1&destination={{ $pontoColeta->latitude }},{{ $pontoColeta->longitude }}&travelmode=driving" target="_blank" rel="noopener noreferrer">Abrir no Google Maps</a>
+                        </div>
+                        <span class="distanciaPonto">Calculando</span>
+                    </div>
+                @empty
+                    <div class="PontoColeta vazio">
+                        <div class="pontoInfo">
+                            <p>{{ $termoMedicamento !== '' ? 'Nenhum ponto encontrado' : 'Nenhum ponto aprovado' }}</p>
+                            <small>{{ $termoMedicamento !== '' ? 'Tente pesquisar outro medicamento ou conferir se ele ja foi validado no estoque.' : 'Cadastre um ponto de coleta para aparecer aqui.' }}</small>
+                        </div>
+                    </div>
+                @endforelse
             </div>
         </aside>
 
@@ -169,6 +174,283 @@
             const btnValidacao = document.getElementById('btnValidacao');
             const validacaoMenu = document.getElementById('validacaoMenu');
             const validacaoMenuContainer = document.getElementById('validacaoMenuContainer');
+            const listaPontosItens = document.querySelector('.listaPontosItens');
+            const formPesquisaMedicamento = document.getElementById('formPesquisaMedicamento');
+            const inputPesquisaMedicamento = document.getElementById('inputPesquisaMedicamento');
+            const sugestoesMedicamentos = document.getElementById('sugestoesMedicamentos');
+            let timeoutSugestoes = null;
+            let requisicaoSugestoes = null;
+            let ultimaLocalizacaoUsuario = null;
+
+            const esconderSugestoes = function () {
+                if (!sugestoesMedicamentos || !inputPesquisaMedicamento) return;
+
+                sugestoesMedicamentos.innerHTML = '';
+                sugestoesMedicamentos.setAttribute('hidden', 'hidden');
+                inputPesquisaMedicamento.setAttribute('aria-expanded', 'false');
+            };
+
+            const enviarPesquisaMedicamento = function (nomeMedicamento) {
+                if (!formPesquisaMedicamento || !inputPesquisaMedicamento) return;
+
+                inputPesquisaMedicamento.value = nomeMedicamento;
+                esconderSugestoes();
+                formPesquisaMedicamento.submit();
+            };
+
+            const renderizarSugestoes = function (sugestoes) {
+                if (!sugestoesMedicamentos || !inputPesquisaMedicamento) return;
+
+                sugestoesMedicamentos.innerHTML = '';
+
+                if (!Array.isArray(sugestoes) || sugestoes.length === 0) {
+                    esconderSugestoes();
+                    return;
+                }
+
+                sugestoes.forEach(function (nomeMedicamento) {
+                    const botao = document.createElement('button');
+                    botao.type = 'button';
+                    botao.className = 'sugestaoMedicamento';
+                    botao.setAttribute('role', 'option');
+                    botao.textContent = nomeMedicamento;
+                    botao.addEventListener('click', function () {
+                        enviarPesquisaMedicamento(nomeMedicamento);
+                    });
+
+                    sugestoesMedicamentos.appendChild(botao);
+                });
+
+                sugestoesMedicamentos.removeAttribute('hidden');
+                inputPesquisaMedicamento.setAttribute('aria-expanded', 'true');
+            };
+
+            const buscarSugestoesMedicamentos = function () {
+                if (!inputPesquisaMedicamento || !sugestoesMedicamentos) return;
+
+                const termo = inputPesquisaMedicamento.value.trim();
+
+                if (termo.length < 2) {
+                    esconderSugestoes();
+                    return;
+                }
+
+                if (requisicaoSugestoes) {
+                    requisicaoSugestoes.abort();
+                }
+
+                requisicaoSugestoes = new AbortController();
+
+                const url = new URL(inputPesquisaMedicamento.dataset.sugestoesUrl, window.location.origin);
+                url.searchParams.set('termo', termo);
+
+                fetch(url.toString(), {
+                    headers: {
+                        Accept: 'application/json'
+                    },
+                    signal: requisicaoSugestoes.signal
+                })
+                    .then(function (response) {
+                        if (!response.ok) throw new Error('Erro ao buscar sugestoes.');
+                        return response.json();
+                    })
+                    .then(function (sugestoes) {
+                        if (inputPesquisaMedicamento.value.trim() !== termo) return;
+                        renderizarSugestoes(sugestoes);
+                    })
+                    .catch(function (error) {
+                        if (error.name === 'AbortError') return;
+                        esconderSugestoes();
+                    });
+            };
+
+            if (inputPesquisaMedicamento) {
+                inputPesquisaMedicamento.addEventListener('input', function () {
+                    window.clearTimeout(timeoutSugestoes);
+                    timeoutSugestoes = window.setTimeout(buscarSugestoesMedicamentos, 300);
+                });
+
+                inputPesquisaMedicamento.addEventListener('keydown', function (event) {
+                    if (event.key === 'Escape') {
+                        esconderSugestoes();
+                    }
+                });
+            }
+
+            document.addEventListener('click', function (event) {
+                if (!sugestoesMedicamentos || !inputPesquisaMedicamento) return;
+
+                const clicouNaBusca = inputPesquisaMedicamento.contains(event.target)
+                    || sugestoesMedicamentos.contains(event.target);
+
+                if (!clicouNaBusca) {
+                    esconderSugestoes();
+                }
+            });
+
+            const obterDestinoDoCard = function (card) {
+                if (!card) return null;
+
+                const latitude = parseFloat(card.dataset.latitude);
+                const longitude = parseFloat(card.dataset.longitude);
+
+                if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) {
+                    return null;
+                }
+
+                return {
+                    latitude: latitude,
+                    longitude: longitude
+                };
+            };
+
+            const solicitarRotaParaCard = function (card) {
+                const destino = obterDestinoDoCard(card);
+
+                if (!destino) return;
+
+                const distanciaEl = card.querySelector('.distanciaPonto');
+                if (distanciaEl) distanciaEl.textContent = 'Rota...';
+
+                window.dispatchEvent(new CustomEvent('sgdm:ponto-selecionado', {
+                    detail: destino
+                }));
+            };
+
+            const atualizarLinksGoogleMaps = function () {
+                const links = document.querySelectorAll('.abrirMaps');
+
+                links.forEach(function (link) {
+                    const card = link.closest('.PontoColeta');
+                    const destino = obterDestinoDoCard(card);
+
+                    if (!destino) return;
+
+                    const url = new URL('https://www.google.com/maps/dir/');
+                    url.searchParams.set('api', '1');
+                    url.searchParams.set('destination', destino.latitude + ',' + destino.longitude);
+                    url.searchParams.set('travelmode', 'driving');
+
+                    if (ultimaLocalizacaoUsuario) {
+                        url.searchParams.set('origin', ultimaLocalizacaoUsuario.lat + ',' + ultimaLocalizacaoUsuario.lng);
+                    }
+
+                    link.href = url.toString();
+                });
+            };
+
+            const calcularDistanciaKm = function (origem, destino) {
+                const raioTerraKm = 6371;
+                const grausParaRadianos = function (valor) {
+                    return valor * Math.PI / 180;
+                };
+                const diferencaLatitude = grausParaRadianos(destino.lat - origem.lat);
+                const diferencaLongitude = grausParaRadianos(destino.lng - origem.lng);
+                const latOrigem = grausParaRadianos(origem.lat);
+                const latDestino = grausParaRadianos(destino.lat);
+                const a = Math.sin(diferencaLatitude / 2) * Math.sin(diferencaLatitude / 2)
+                    + Math.cos(latOrigem) * Math.cos(latDestino)
+                    * Math.sin(diferencaLongitude / 2) * Math.sin(diferencaLongitude / 2);
+                const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+                return raioTerraKm * c;
+            };
+
+            const formatarDistancia = function (distanciaKm) {
+                if (distanciaKm < 1) {
+                    return Math.round(distanciaKm * 1000) + ' m';
+                }
+
+                return distanciaKm.toFixed(1).replace('.', ',') + ' km';
+            };
+
+            const ordenarPontosPorDistancia = function (localizacaoUsuario) {
+                if (!listaPontosItens) return;
+
+                const cards = Array.from(listaPontosItens.querySelectorAll('.PontoColeta:not(.vazio)'));
+
+                cards.forEach(function (card) {
+                    const latitude = parseFloat(card.dataset.latitude);
+                    const longitude = parseFloat(card.dataset.longitude);
+                    const distanciaEl = card.querySelector('.distanciaPonto');
+
+                    if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) {
+                        card.dataset.distancia = String(Number.MAX_SAFE_INTEGER);
+                        if (distanciaEl) distanciaEl.textContent = 'Sem local';
+                        return;
+                    }
+
+                    const distanciaKm = calcularDistanciaKm(localizacaoUsuario, {
+                        lat: latitude,
+                        lng: longitude
+                    });
+
+                    card.dataset.distancia = String(distanciaKm);
+                    if (distanciaEl) distanciaEl.textContent = formatarDistancia(distanciaKm);
+                });
+
+                cards.sort(function (a, b) {
+                    return parseFloat(a.dataset.distancia) - parseFloat(b.dataset.distancia);
+                });
+
+                cards.forEach(function (card, index) {
+                    card.classList.toggle('ativo', index === 0);
+                    listaPontosItens.appendChild(card);
+                });
+
+                if (cards[0]) {
+                    solicitarRotaParaCard(cards[0]);
+                }
+            };
+
+            window.addEventListener('sgdm:route-info', function (event) {
+                const cards = Array.from(document.querySelectorAll('.listaPontosItens .PontoColeta:not(.vazio)'));
+                const card = cards.find(function (item) {
+                    return Number(item.dataset.latitude) === Number(event.detail.latitude)
+                        && Number(item.dataset.longitude) === Number(event.detail.longitude);
+                });
+
+                if (!card) return;
+
+                const distanciaEl = card.querySelector('.distanciaPonto');
+                if (distanciaEl) {
+                    distanciaEl.innerHTML = event.detail.distance + '<small>' + event.detail.duration + '</small>';
+                }
+            });
+
+            window.addEventListener('sgdm:route-error', function (event) {
+                const cards = Array.from(document.querySelectorAll('.listaPontosItens .PontoColeta:not(.vazio)'));
+                const card = cards.find(function (item) {
+                    return Number(item.dataset.latitude) === Number(event.detail.latitude)
+                        && Number(item.dataset.longitude) === Number(event.detail.longitude);
+                });
+
+                if (!card) return;
+
+                const distanciaEl = card.querySelector('.distanciaPonto');
+                if (distanciaEl) distanciaEl.textContent = 'Sem rota';
+            });
+
+            window.addEventListener('sgdm:user-location', function (event) {
+                ultimaLocalizacaoUsuario = event.detail;
+                atualizarLinksGoogleMaps();
+                ordenarPontosPorDistancia(event.detail);
+            });
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    ultimaLocalizacaoUsuario = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+                    atualizarLinksGoogleMaps();
+                    ordenarPontosPorDistancia(ultimaLocalizacaoUsuario);
+                }, function () {}, {
+                    enableHighAccuracy: true,
+                    timeout: 8000,
+                    maximumAge: 60000
+                });
+            }
 
             pontos.forEach(function (ponto) {
                 ponto.addEventListener('click', function () {
@@ -177,6 +459,7 @@
                     });
 
                     ponto.classList.add('ativo');
+                    solicitarRotaParaCard(ponto);
                 });
             });
 

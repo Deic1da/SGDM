@@ -61,6 +61,27 @@ body {
 	box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
 }
 
+.flash {
+	width: min(1300px, 100%);
+	margin: 0 auto 12px;
+	padding: 10px 12px;
+	border-radius: 10px;
+	font-size: 13px;
+	font-weight: 700;
+}
+
+.flash.sucesso {
+	border: 1px solid #bde6ce;
+	background: #eefcf4;
+	color: #1f6d3d;
+}
+
+.flash.erro {
+	border: 1px solid #f2c4c4;
+	background: #fff0f0;
+	color: #8e1f1f;
+}
+
 .topoSecao {
 	display: flex;
 	justify-content: space-between;
@@ -77,9 +98,20 @@ h2 {
 	line-height: 1;
 }
 
+.formPesquisaEstoque {
+	display: flex;
+	gap: 10px;
+	align-items: center;
+}
+
+.pesquisaAutocomplete {
+	position: relative;
+	width: min(380px, 100%);
+}
+
 .pesquisa {
 	height: 42px;
-	width: min(380px, 100%);
+	width: 100%;
 	padding: 0 12px;
 	padding-right: 38px;
 	border-radius: 12px;
@@ -88,6 +120,50 @@ h2 {
 	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E");
 	background-repeat: no-repeat;
 	background-position: right 12px center;
+}
+
+.btnPesquisar {
+	height: 42px;
+	padding: 0 14px;
+	border: none;
+	border-radius: 12px;
+	background: var(--primary);
+	color: #ffffff;
+	font-family: "Manrope", sans-serif;
+	font-weight: 700;
+	cursor: pointer;
+}
+
+.sugestoesEstoque {
+	position: absolute;
+	top: calc(100% + 6px);
+	left: 0;
+	right: 0;
+	z-index: 25;
+	overflow: hidden;
+	border: 1px solid rgba(119, 61, 190, 0.22);
+	border-radius: 12px;
+	background: #ffffff;
+	box-shadow: 0 14px 30px rgba(0, 0, 0, 0.14);
+}
+
+.sugestaoEstoque {
+	width: 100%;
+	padding: 10px 12px;
+	border: none;
+	background: #ffffff;
+	color: var(--ink);
+	font-family: "Manrope", sans-serif;
+	font-size: 13px;
+	font-weight: 700;
+	text-align: left;
+	cursor: pointer;
+}
+
+.sugestaoEstoque:hover,
+.sugestaoEstoque:focus {
+	outline: none;
+	background: #f3eaff;
 }
 
 .pesquisa:focus,
@@ -135,8 +211,27 @@ tbody tr:first-child td {
 	border-top: none;
 }
 
-.destaque {
-	background: #f3eaff;
+.linhaSelecionavel {
+	cursor: pointer;
+}
+
+.linhaSelecionavel.selecionado {
+	background: #eadbff;
+}
+
+.linhaBloqueada {
+	color: rgba(0, 0, 0, 0.45);
+}
+
+.radioEstoque {
+	width: 17px;
+	height: 17px;
+	accent-color: var(--primary);
+	cursor: pointer;
+}
+
+.radioEstoque:disabled {
+	cursor: not-allowed;
 }
 
 .status {
@@ -178,6 +273,19 @@ tbody tr:first-child td {
 	font-size: 13px;
 	text-transform: uppercase;
 	letter-spacing: 0.08em;
+}
+
+.medicamentoSelecionado {
+	margin: 0;
+	color: rgba(0, 0, 0, 0.64);
+	font-size: 12px;
+	line-height: 1.35;
+}
+
+#formRegistrarEntrega {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
 }
 
 .formulario label {
@@ -257,7 +365,14 @@ tbody tr:first-child td {
 		align-items: stretch;
 	}
 
-	.pesquisa {
+	.formPesquisaEstoque {
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	.pesquisaAutocomplete,
+	.pesquisa,
+	.btnPesquisar {
 		width: 100%;
 	}
 }

@@ -24,6 +24,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/PaginaInicial', [PaginasController::class, 'inicio'])
         ->name('pagina-inicial');
 
+    Route::get('/Medicamentos/Sugestoes', [PaginasController::class, 'sugestoesMedicamentos'])
+        ->name('medicamentos.sugestoes');
+
     Route::get('/Descarte', [PaginasController::class, 'descarte'])
         ->name('descarte');
 
@@ -66,5 +69,11 @@ Route::middleware('auth')->group(function () {
 
         Route::get('/Entidades/{entidade}/Estoque', [EstoqueController::class, 'index'])
             ->name('estoque-medicamento');
+
+        Route::get('/Entidades/{entidade}/Estoque/Sugestoes', [EstoqueController::class, 'sugestoes'])
+            ->name('estoque-medicamento.sugestoes');
+
+        Route::post('/Entidades/{entidade}/Estoque/Entregar', [EstoqueController::class, 'registrarEntrega'])
+            ->name('estoque-medicamento.entregar');
     });
 });
